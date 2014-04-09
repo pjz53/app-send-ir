@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" xmlns:mx="library://ns.adobe.com/flex/mx"
+		xmlns:s="library://ns.adobe.com/flex/spark" title="SampleAlert" >
+	
+	<fx:Declarations>
+		<fx:Component className="AlertMsg">
+			<s:SkinnablePopUpContainer x="50" y="300">
+				<s:TitleWindow title="My Message" close="close()">
+					<s:VGroup horizontalAlign="center" paddingTop="8" paddingBottom="8" paddingLeft="8" paddingRight="8" gap="5" width="100%">
+						<s:Label text="My alert message text here..."/>
+						<s:Button label="OK" click="close()"/>
+					</s:VGroup>
+				</s:TitleWindow>
+			</s:SkinnablePopUpContainer>
+		</fx:Component>
+	</fx:Declarations>
+	
+	<s:layout>
+		<s:VerticalLayout paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5" gap="10" 
+						  horizontalAlign="center" verticalAlign="top"/>
+	</s:layout>
+	
+	<s:TextArea text="This sample shows how you can display a simple alert message in a mobile application using the Spark SkinnablePopUpContainer. The mx.controls.Alert is not recommended for mobile." 
+				width="98%" editable="false"/>
+	<s:Button label="Show Alert" click="(new AlertMsg()).open(this, false)"/>
+</s:View>

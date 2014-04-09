@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="@media CSS Filter">
+	
+	<fx:Style>
+		@namespace s "library://ns.adobe.com/flex/spark";
+		/* Every os-platform @ 160dpi */
+		@media (application-dpi: 160) {
+			.btn1 {
+				fontSize: 10;
+			}
+		}
+		/* IOS only @ 240dpi */
+		@media (application-dpi: 240) and (os-platform: "IOS") {
+			.btn1 {
+				fontSize: 11;
+			}
+		}
+		/* IOS at 160dpi or Android @ 160dpi */
+		@media (os-platform: "IOS") and (application-dpi: 160), (os-platform: "ANDROID") and (application-dpi: 160) {
+			.btn1 {
+				fontSize: 13;
+			}
+		}
+		
+	</fx:Style>
+	
+	<s:layout>
+		<s:VerticalLayout paddingTop="50" paddingBottom="20" paddingLeft="30" paddingRight="30" gap="40" horizontalAlign="center"/>
+	</s:layout>
+
+	<s:TextArea width="98%" editable="false"
+		text="The new @media rule allows you to apply style based on a target OS or DPI. Use @media rules in your style sheets to filter CSS rules such as font sizes and padding values for each DPI. This sample button doesn't do
+perform any function other than show the font size according to the DPI specified in the style filters."/>	
+	<s:Button id="btn1" label="Sample Button"/>	
+	
+</s:View>

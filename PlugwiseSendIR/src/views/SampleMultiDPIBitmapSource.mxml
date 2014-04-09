@@ -1,0 +1,34 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		title="MultiDPIBitmapSource">
+		
+	<fx:Script>
+		<![CDATA[
+			import mx.core.FlexGlobals;
+			protected function onClick():void 
+			{
+				// Note: If applicationDPI is not set on the root application, it will match runtimeDPI
+				ta.text = "Image path chosen based on DPI: " + myImage.source.getSource(FlexGlobals.topLevelApplication.runtimeDPI).toString();
+			}
+		]]>
+	</fx:Script>
+		
+		
+	<s:Scroller height="100%">
+		<s:VGroup width="95%" horizontalAlign="center" paddingTop="25" gap="10" height="10%">
+			<s:TextArea width="90%" editable="false"  
+					text="The MultiDPIBitmapSource component can be used to provide a list of bitmaps for various runtime densities (DPI). It is supplied as the source to BitmapImage or Image and as the icon of a Button."/> 
+			<s:Image id="myImage">
+				<s:source>
+					<s:MultiDPIBitmapSource
+						source160dpi="assets/launchpad_low-res-icon.png"
+						source240dpi="assets/launchpad_med-res-icon.png"
+						source320dpi="assets/launchpad_high-res-icon.png"/>
+				</s:source>
+			</s:Image>
+			<s:Button label="Get Image Source" click="onClick()"/>
+			<s:TextArea id="ta" editable="false" width="90%"/>	
+		</s:VGroup>  
+	</s:Scroller>
+</s:View>

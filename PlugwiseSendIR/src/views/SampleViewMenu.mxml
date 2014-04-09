@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="ViewMenu Sample" menuKeyPressed="view1_menuKeyPressedHandler(event)">
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			protected function onItemClick(event:MouseEvent):void
+			{
+				switch (event.currentTarget.label) {
+					case "Add" :
+						txt.text = "Add selected";
+						break;
+					case "Cancel" :
+						txt.text = "Cancel selected";
+						break;
+					case "Delete" :
+						txt.text = "Delete selected";
+						break;
+					case "Edit" :
+						txt.text = "Edit selected";
+						break;
+					case "Search" :
+						txt.text = "Search selected";
+						break;
+					default :
+						txt.text = "Error";
+				}
+			}
+			// Shows how you can handle the menu key press event (where a device supports a menu key) versus using the viewMenuOpen property
+			protected function view1_menuKeyPressedHandler(event:FlexEvent):void
+			{
+				trace("Menu key was pressed");
+			}
+			
+		]]>
+	</fx:Script>
+	<!-- The menu is skinnable by setting the skin class in the main application file -->
+	<s:viewMenuItems>
+		<s:ViewMenuItem label="Add" click="onItemClick(event)"/>
+		<s:ViewMenuItem label="Cancel" click="onItemClick(event)"/>
+		<s:ViewMenuItem label="Delete" click="onItemClick(event)"/>
+		<s:ViewMenuItem label="Edit" click="onItemClick(event)"/>
+		<s:ViewMenuItem label="Search" click="onItemClick(event)"/>
+	</s:viewMenuItems>
+	
+	<s:layout>
+		<s:VerticalLayout paddingTop="5" paddingBottom="5" paddingLeft="5" paddingRight="5" gap="10" 
+						  horizontalAlign="center" verticalAlign="top"/>
+	</s:layout>
+	
+	<s:TextArea width="98%" editable="false"  
+				text="Pops up a menu when the device menu button is pressed, or when the viewMenuOpen property on the main application is set to true. You do not have to
+explicitly create the ViewMenu container, it is created implicitly when the menu button is pressed on the device."/>
+	<s:Label id="txt"/>
+	
+	<!-- You can also programmatically open and close the menu as shown in the buttons below -->
+	<s:HGroup>
+		<s:Button label="Open Menu"
+				  click="mx.core.FlexGlobals.topLevelApplication.viewMenuOpen=true;"/>
+		<s:Button label="Close Menu"
+				  click="mx.core.FlexGlobals.topLevelApplication.viewMenuOpen=false;"/>
+	</s:HGroup>
+</s:View>

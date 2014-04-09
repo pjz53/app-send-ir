@@ -1,0 +1,127 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+	xmlns:s="library://ns.adobe.com/flex/spark" viewActivate="viewActivateHandler(event)"
+	>
+
+	<fx:Script>
+		<![CDATA[
+			import mx.collections.ArrayCollection;
+			import spark.events.ViewNavigatorEvent;
+
+			/*[Bindable]
+			[Embed("assets/launchpad_default_icon32.png")]
+			public var fbIcon:Class;*/
+
+			[Bindable]
+			protected var viewsAC:ArrayCollection = new ArrayCollection(); 
+
+			protected function viewActivateHandler(event:ViewNavigatorEvent):void
+			{
+				/*viewsAC.addItem({label:"Back/Home/Search Events", icon:fbIcon});
+				viewsAC.addItem({label:"Busy Indicator", icon:fbIcon});
+				viewsAC.addItem({label:"CSS Media Queries", icon:fbIcon});
+				viewsAC.addItem({label:"Raw Camera", icon:fbIcon});
+				viewsAC.addItem({label:"Context Menu", icon:fbIcon});
+				viewsAC.addItem({label:"Local DB", icon:fbIcon});
+				viewsAC.addItem({label:"Gesture", icon:fbIcon});
+				viewsAC.addItem({label:"Multitouch", icon:fbIcon});
+				viewsAC.addItem({label:"MultiDPIBitmapSource", icon:fbIcon});
+				viewsAC.addItem({label:"Network Info", icon:fbIcon});
+				viewsAC.addItem({label:"Alert", icon:fbIcon});
+				viewsAC.addItem({label:"Skinnable Popup Container", icon:fbIcon});
+				viewsAC.addItem({label:"Fade View Transition", icon:fbIcon});
+				viewsAC.addItem({label:"Slide View Transition", icon:fbIcon});
+				viewsAC.addItem({label:"Zoom View Transition", icon:fbIcon});*/
+			}
+
+			protected function onListItemSelect():void
+			{
+				/*if (viewsList.selectedItem.label=="Accelerometer")
+					navigator.pushView(views.SampleAccelerometer);
+
+				if (viewsList.selectedItem.label=="Back/Home/Search Events")
+					navigator.pushView(views.SampleBackMenuSearchEvent);
+
+				if (viewsList.selectedItem.label=="Busy Indicator")
+					navigator.pushView(views.SampleBusyIndicator);
+
+				if (viewsList.selectedItem.label=="CSS Media Queries")
+					navigator.pushView(views.SampleCSSMediaQueries);
+
+				if (viewsList.selectedItem.label=="Raw Camera")
+					navigator.pushView(views.SampleCamera);
+
+				if (viewsList.selectedItem.label=="Context Menu")
+					navigator.pushView(views.SampleContextMenu);
+
+				if (viewsList.selectedItem.label=="Local DB")
+					navigator.pushView(views.SampleSimpleDB);
+
+				if (viewsList.selectedItem.label=="Gesture")
+					navigator.pushView(views.SampleGesture);
+
+				if (viewsList.selectedItem.label=="Multitouch")
+					navigator.pushView(views.SampleMultitouch);
+
+				if (viewsList.selectedItem.label=="MultiDPIBitmapSource")
+					navigator.pushView(views.SampleMultiDPIBitmapSource);
+
+				if (viewsList.selectedItem.label=="Network Info")
+					navigator.pushView(views.SampleNetworkInfo);
+
+				if (viewsList.selectedItem.label=="Skinnable Popup Container")
+					navigator.pushView(views.SampleSkinnablePopupContainer);
+
+				if (viewsList.selectedItem.label=="Alert")
+					navigator.pushView(views.SampleAlert);
+
+				if (viewsList.selectedItem.label=="View Menu")
+					navigator.pushView(views.SampleViewMenu);
+
+				if (viewsList.selectedItem.label=="Fade View Transition")
+					navigator.pushView(views.SampleFade);
+
+				if (viewsList.selectedItem.label=="Slide View Transition")
+					navigator.pushView(views.SampleSlide);
+
+				if (viewsList.selectedItem.label=="Zoom View Transition")
+					navigator.pushView(views.SampleZoom);*/
+
+			}
+			
+			protected function settings_clickHandler(event:MouseEvent):void
+			{
+				// TODO Auto-generated method stub
+				
+			}
+			
+		]]>
+	</fx:Script>
+
+	<s:navigationContent>
+		<s:Button label="Play" click="navigator.popToFirstView()" fontSize="10" color="#ffffff" fontWeight="normal"/>
+	</s:navigationContent>
+	<s:titleContent>
+		<s:Label text="Send IR..."  fontSize="10" color="#ffffff" fontWeight="normal"/>
+	</s:titleContent>
+	<s:actionContent>
+		<s:Button label="Settings" click="settings_clickHandler(event)" fontSize="10" color="#ffffff" fontWeight="normal"/>
+	</s:actionContent>
+		<!--<s:List id="viewsList" top="0" bottom="0" left="0" right="0" dataProvider="{viewsAC}" change="onSampleSelect()">
+			<s:itemRenderer>
+				<fx:Component>
+					<s:IconItemRenderer iconField="icon"/>
+				</fx:Component>
+			</s:itemRenderer>
+		</s:List>-->
+	
+	<s:SplitViewNavigator id="svn" width="100%" height="100%">
+		<s:layout>
+			<s:VerticalLayout gap="0" />
+		</s:layout>
+		<s:ViewNavigator id="devicesMasterNav" width="100%" height="60" firstView="views.PWDevicesMaster"/>
+		<s:ViewNavigator id="devicesDetailNav" width="100%" height="100%" firstView="views.PWDeviceDetail"/>
+	</s:SplitViewNavigator>
+	
+	
+</s:View>

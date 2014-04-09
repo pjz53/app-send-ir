@@ -1,0 +1,86 @@
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		title="Slide Transition">
+	
+	<fx:Script>
+		<![CDATA[
+			import spark.transitions.SlideViewTransition;
+			import spark.transitions.SlideViewTransitionMode;
+			import spark.transitions.ViewTransitionDirection;
+			
+			public var slideTrans:SlideViewTransition = new SlideViewTransition();
+			
+			protected function onSlide():void 
+			{
+				validateDirection();
+				if (txtDuration.text!=null && txtDuration.text.length>0)
+					slideTrans.duration = parseFloat(txtDuration.text)*1000;
+				slideTrans.mode = rgMode.selectedValue as String;
+				navigator.popToFirstView(slideTrans);
+			}
+			
+			protected function add_clickHandler(event:MouseEvent):void
+			{
+				var n:int = parseInt(txtDuration.text);
+				txtDuration.text = new String(n+1);
+			}
+			protected function subtract_clickHandler(event:MouseEvent):void
+			{
+				
+				var n:int = parseInt(txtDuration.text);
+				txtDuration.text = new String(n-1);
+			}
+			
+			protected function validateDirection():void
+			{
+				if (txtDirection.text != ViewTransitionDirection.LEFT && txtDirection.text != ViewTransitionDirection.RIGHT && 
+					txtDirection.text != ViewTransitionDirection.UP && txtDirection.text != ViewTransitionDirection.DOWN)
+					txtDirection.text = ViewTransitionDirection.RIGHT;
+				else slideTrans.direction = txtDirection.text;
+			} 
+		]]>
+	</fx:Script>
+	
+	<fx:Declarations>
+		<s:RadioButtonGroup id="rgMode"/>
+	</fx:Declarations>
+	
+	<s:navigationContent>
+		<s:Button label="Home" height="100" click="navigator.popToFirstView(slideTrans)"/>
+	</s:navigationContent>
+	<s:actionContent>
+		<s:Button id="btn" height="100" label="Back" click="navigator.popToFirstView(slideTrans)"/>
+	</s:actionContent>
+	
+	<s:VGroup width="100%" height="100%" gap="65" horizontalAlign="center" verticalAlign="middle">
+		<s:HGroup verticalAlign="middle" top="50">
+			<s:Label text="Duration (seconds)"/>
+			<s:HGroup>
+				<s:Button id="addBtn" label="+" click="add_clickHandler(event)"/>
+				<s:TextInput id="txtDuration" width="50" height="65" restrict=".0-9" text="1"
+							 textAlign="center"/>
+				
+				<s:Button id="subtractBtn" label="-" click="subtract_clickHandler(event)"/>
+			</s:HGroup>  
+		</s:HGroup>
+		
+		<s:HGroup verticalAlign="middle">
+			<s:Label text="Direction (right, left, up, down)"/>
+			<s:TextInput id="txtDirection" text="right" width="100"/>
+		</s:HGroup>  
+		
+		<s:VGroup>
+			<s:Label text="Slide Mode"/>
+			<s:HGroup>
+				<s:RadioButton id="coverMode" label="{SlideViewTransitionMode.COVER}" groupName="rgMode" selected="true"/>
+				<s:RadioButton id="pushMode" label="{SlideViewTransitionMode.PUSH}" groupName="rgMode"/>
+				<s:RadioButton id="uncoverMode" label="{SlideViewTransitionMode.UNCOVER}" groupName="rgMode"/>
+			</s:HGroup>
+		</s:VGroup>
+		
+		<s:HGroup>
+			<s:Button label="Start" click="onSlide()"/>
+		</s:HGroup>
+	</s:VGroup>  
+	
+</s:View>

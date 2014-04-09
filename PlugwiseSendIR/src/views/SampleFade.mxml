@@ -1,0 +1,49 @@
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		title="Fade Transition">
+	
+	<fx:Script>
+		<![CDATA[
+			import spark.transitions.CrossFadeViewTransition;
+			
+			public var fadeTrans:CrossFadeViewTransition = new CrossFadeViewTransition();
+			
+			protected function onFade():void 
+			{
+				if (txtDuration.text!=null && txtDuration.text.length>0)
+					fadeTrans.duration = parseFloat(txtDuration.text)*1000;
+				navigator.popToFirstView(fadeTrans);
+			}
+			
+			protected function add_clickHandler(event:MouseEvent):void
+			{
+				var n:int = parseInt(txtDuration.text);
+				txtDuration.text = new String(n+1);
+			}
+			
+			protected function subtract_clickHandler(event:MouseEvent):void
+			{
+				
+				var n:int = parseInt(txtDuration.text);
+				txtDuration.text = new String(n-1);
+			}
+		]]>
+	</fx:Script>
+	
+	<s:VGroup width="100%" height="100%" horizontalAlign="center" verticalAlign="middle" gap="65">
+		<s:HGroup verticalAlign="middle" top="50">
+			<s:Label text="Duration (seconds)"/>
+			<s:HGroup verticalAlign="middle">
+				<s:Button id="addBtn" label="+" click="add_clickHandler(event)"/>
+				<s:TextInput id="txtDuration" width="{addBtn.width}" height="{addBtn.height}" restrict=".0-9" text="1"
+							 textAlign="center"/>
+				<s:Button id="subtractBtn" label="-" click="subtract_clickHandler(event)"/>
+			</s:HGroup>  
+		</s:HGroup>
+		
+		<s:HGroup>
+			<s:Button label="Start" width="200" click="onFade()"/>
+		</s:HGroup>
+	</s:VGroup>  
+	
+</s:View>

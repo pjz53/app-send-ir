@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009"
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		xmlns:mx="library://ns.adobe.com/flex/mx"
+		removing="view1_removingHandler(event)" textAlign="center" title="Multi-Camera Access"
+		viewActivate="view1_viewActivateHandler(event)">	
+	<fx:Script>
+		<![CDATA[
+			import mx.utils.ObjectUtil;
+			
+			import spark.events.ViewNavigatorEvent;
+			protected var cam:Camera;
+			
+			[Bindable]
+			protected var numCams:int;
+			[Bindable]	
+			protected var vid:Video;
+			
+			protected var array:Array;
+			
+			protected function view1_viewActivateHandler(event:ViewNavigatorEvent):void
+			{
+				if (Camera.isSupported)
+				{
+					var name1:String;
+					var name2:String;
+					
+					array = Camera.names;
+					numCams = array.length;
+					for each (var s:String in array) {
+						log.appendText("Found Camera by name: " + s + " \n");
+					}
+				}
+				else lbl.text = "Camera not supported";
+			}
+			
+			
+			protected function onCamera1():void
+			{
+				cam = Camera.getCamera("0");
+				cam.setMode(width, height, 10);
+				vid = new Video(this.width,500);
+				vid.attachCamera(cam);
+				uic.addChild(vid);
+			}
+			
+			protected function onCamera2():void
+			{
+				if (numCams == 2)
+				{
+					cam = Camera.getCamera("1"); // it's recommended to access the camera by it's array index
+					cam.setMode(width, height, 10);
+					vid = new Video(this.width, 500);
+					vid.attachCamera(cam);
+					uic.addChild(vid);
+				}
+			}
+			
+			protected function view1_removingHandler(event:ViewNavigatorEvent):void
+			{
+				vid = null;
+				cam = null;
+			}
+			
+		]]>
+	</fx:Script>
+	<!-- Note: ensure you have the Camera permission in the app-descriptor XML for Android devices -->
+	<s:VGroup  width="100%" height="100%" horizontalAlign="center">
+		<s:Label id="lbl"/>
+		<s:TextArea id="txt" visible="{vid==null?true:false}" editable="false"
+					includeInLayout="{vid==null?true:false}"
+					text="This sample shows how you can access multiple cameras on devices such as iPhones with both a front and rear camera."
+					textAlign="left"/>
+		
+		<s:HGroup>
+			<s:Button label="Camera 1 On" click="onCamera1()" visible="{Camera.isSupported}"/>
+			<s:Button label="Camera 2 On" click="onCamera2()" enabled="{numCams==2?true:false}"/>
+			<s:Button label="Off" click="vid.attachCamera(null);vid=null;cam=null;"/>
+		</s:HGroup>
+		<s:TextArea id="log" editable="false"/>
+		<mx:UIComponent id="uic" width="100%" height="100%"/>		
+	</s:VGroup>
+	</s:View>

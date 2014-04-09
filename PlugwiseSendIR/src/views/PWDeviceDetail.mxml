@@ -1,0 +1,35 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Details"
+		creationComplete="creationCompleteHandler(event)"
+		viewActivate="viewActivateHandler(event)"
+		actionBarVisible="false">
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import spark.events.ViewNavigatorEvent;
+			
+			import models.SendIRModel;
+			
+			private var model:SendIRModel;
+						
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				model = SendIRModel.sendIRModel;
+			}
+			
+			protected function viewActivateHandler(event:ViewNavigatorEvent):void
+			{
+				
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	<s:Label id="lbl" horizontalCenter="0" verticalCenter="0" width="95%" visible="{data!=null?true:false}" text="Here are some facts and stats about {data.name}"/>
+	
+</s:View>

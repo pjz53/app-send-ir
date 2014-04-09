@@ -1,0 +1,65 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark"
+		creationComplete="creationCompleteHandler(event)"
+		viewActivate="viewActivateHandler(event)"
+		actionBarVisible="false">
+	
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import spark.events.ViewNavigatorEvent;
+			
+			import models.SendIRModel;
+			
+			[Bindable]
+			private var model:SendIRModel;
+			
+			protected function list_clickHandler(event:MouseEvent):void
+			{
+				(this.parentDocument as PWSendIRHome).devicesDetailNav.activeView.data=deviceslist.selectedItem;
+			}
+			
+			protected function creationCompleteHandler(event:FlexEvent):void
+			{
+				model = SendIRModel.sendIRModel;
+			}
+			
+			protected function viewActivateHandler(event:ViewNavigatorEvent):void
+			{
+				
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	<s:List id="deviceslist" width="100%" height="100%" click="list_clickHandler(event)" 
+			dataProvider="{model.defaultDevices}" horizontalScrollPolicy="on" verticalScrollPolicy="off">
+		<s:layout>
+			<s:HorizontalLayout gap="0" />
+		</s:layout>
+		<s:itemRenderer>
+			<fx:Component>
+				<s:ItemRenderer width="120" height="100%">
+					<s:layout>
+						<s:BasicLayout/>
+					</s:layout>
+					<s:Label text="{data.name}" horizontalCenter="0" verticalCenter="0"/>
+					<s:Line height="100%" right="0">
+						<s:stroke>
+							<s:SolidColorStroke color="#cccccc" weight="1"/>
+						</s:stroke>
+					</s:Line>
+				</s:ItemRenderer>
+			</fx:Component>
+		</s:itemRenderer>
+	</s:List>
+	<s:Line width="100%" bottom="0">
+		<s:stroke>
+			<s:SolidColorStroke color="#cccccc" weight="1"/>
+		</s:stroke>
+	</s:Line>
+</s:View>
