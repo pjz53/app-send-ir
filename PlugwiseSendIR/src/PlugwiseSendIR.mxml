@@ -150,7 +150,7 @@
 
 	<s:navigationContent>
 		<!--<s:Button icon="@Embed('assets/launchpad_home.png')" click="navigator.popToFirstView()"/>-->
-		<s:Label text="Play" click="navigator.popToFirstView()"/>
+		<!--<s:Label text="Home" click="navigator.popToFirstView()"/>-->
 	</s:navigationContent>
 	
 </s:ViewNavigatorApplication>

@@ -3,7 +3,7 @@ package models
 	
 	import mx.collections.XMLListCollection;
 	
-	import vos.Host;
+	import vos.Gateway;
 	
 	[Bindable]
 	public dynamic class Feature
@@ -21,12 +21,12 @@ package models
 		public var activation_date:Date;
 		public var valid_from:Date;
 		public var valid_to:Date;
-		public var host:Host;
+		public var host:Gateway;
 
 		public static const FEATURE_DATA_SUBSCRIPTION:String = "data_subscription";
 		public static const FEATURE_MERCURY:String = "mercury";
 		
-		public function Feature(xml:XML, host:Host=null) {
+		public function Feature(xml:XML, host:Gateway=null) {
 			fill(xml);
 			this.host = host;
 		}

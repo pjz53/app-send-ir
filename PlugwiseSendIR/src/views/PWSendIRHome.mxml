@@ -5,15 +5,14 @@
 
 	<fx:Script>
 		<![CDATA[
-			import mx.collections.ArrayCollection;
 			import spark.events.ViewNavigatorEvent;
 
 			/*[Bindable]
 			[Embed("assets/launchpad_default_icon32.png")]
 			public var fbIcon:Class;*/
 
-			[Bindable]
-			protected var viewsAC:ArrayCollection = new ArrayCollection(); 
+			/*[Bindable]
+			protected var viewsAC:ArrayCollection = new ArrayCollection();*/ 
 
 			protected function viewActivateHandler(event:ViewNavigatorEvent):void
 			{
@@ -99,10 +98,10 @@
 	</fx:Script>
 
 	<s:navigationContent>
-		<s:Button label="Play" click="navigator.popToFirstView()" fontSize="10" color="#ffffff" fontWeight="normal"/>
+		<s:Button label="Home" click="navigator.popToFirstView()" fontSize="10" color="#ffffff" fontWeight="normal"/>
 	</s:navigationContent>
 	<s:titleContent>
-		<s:Label text="Send IR..."  fontSize="10" color="#ffffff" fontWeight="normal"/>
+		<s:Label text="Send IR..." color="#ffffff" fontWeight="normal"/>
 	</s:titleContent>
 	<s:actionContent>
 		<s:Button label="Settings" click="settings_clickHandler(event)" fontSize="10" color="#ffffff" fontWeight="normal"/>

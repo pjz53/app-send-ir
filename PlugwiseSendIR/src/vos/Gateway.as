@@ -11,6 +11,7 @@ package vos {
 	import flash.net.URLRequestHeader;
 	import flash.utils.Timer;
 	
+	import mx.collections.ArrayCollection;
 	import mx.collections.XMLListCollection;
 	import mx.core.FlexGlobals;
 	import mx.utils.Base64Encoder;
@@ -19,8 +20,9 @@ package vos {
 	import models.SendIRModel;
 	
 	[Bindable]
-	public class Host extends EventDispatcher{
+	public class Gateway extends EventDispatcher{
 		
+		private var _label:String;
 		private var _type:String;
 		private var _hardwareType:String;
 		private var _nullPhase:Boolean;
@@ -104,9 +106,7 @@ package vos {
 		private var _connectedWifiNotAP:Boolean = false;
 		//private var _connectedWifiAP:Boolean = false;
 		private var _connectionMonitorRefreshInterval:Number = 10; // if this is too low, calls will fail!
-		
-		//private var _connectedMercury:Boolean = false;
-		
+				
 		private var _connectionMode:String = "none";
 		private var _connectionLocalAvailable:Boolean = false;
 		private var _connectionMercuryAvailable:Boolean = false;
@@ -168,13 +168,13 @@ package vos {
 		protected var apMonitor:URLLoader;		
 		protected var apMonitorDelay:int = 3000;		
 		protected var apMonitorTimer:Timer = new Timer(apMonitorDelay);	
-		/*protected var internetMonitorTimer:Timer;		
-		protected var localMonitorLastPoll:Date;		
-		protected var internetMonitor:URLLoader;*/		
 		
 		public var appCurrentlyActive:Boolean = true;
 		
-		public function Host(
+		private var _slots:ArrayCollection;// arrayCollection of Slot objects
+		
+		public function Gateway(
+			label:String,
 			type:String,
 			nullPhase:Boolean=true,
 			protocol:String=DEFAULTPROTOCOL,
@@ -214,9 +214,11 @@ package vos {
 			licenseCreatedDate:Date = null,
 			firstDataDate:Date = null,
 			gatewayFeatures:XMLListCollection=null,
-			hardwareType:String=null
+			hardwareType:String=null,
+			slots:ArrayCollection=null
 		) {
 			
+			_label = label;
 			_type = type;
 			_nullPhase = nullPhase;
 			_protocol = protocol;
@@ -257,6 +259,7 @@ package vos {
 			_firstDataDate = firstDataDate;
 			_gatewayFeatures = gatewayFeatures;
 			_hardwareType = hardwareType;
+			_slots = slots;
 			
 			//now initialize a connectionMonitor or start monitors:
 			//if availability changes set the mode
@@ -281,36 +284,6 @@ package vos {
 			SendIRModel.traceHttpResponse("Number of Host instances is now: " + referenceCount);
 		}
 		
-		
-		/*protected function startInternetPoller():void {
-			internetMonitor = new URLMonitor(new URLRequest("http://www.google.com")); // internet can be reached?
-			internetMonitor.addEventListener(StatusEvent.STATUS, setConnectionInternet);
-			internetMonitor.start();
-		}
-		protected function setConnectionInternet(event:StatusEvent):void {
-			connectionInternetAvailable = event.code == "Service.available" ? true : false;
-		}*/
-		/*protected function startLocalPoller(event:Event=null):void {
-			if (localMonitor && localMonitor.running) {
-				localMonitor.stop();
-			}
-			if (hostIP) {
-				var req:URLRequest = new URLRequest(protocol + hostIP);
-				var header:URLRequestHeader = new URLRequestHeader("AUTHORIZATION", basicAuthorizationString());
-				req.requestHeaders.push(header);
-				localMonitor = new URLMonitor(req);
-				localMonitor.addEventListener(StatusEvent.STATUS, setConnectionLocal);
-				localMonitor.acceptableStatusCodes = new Array(200,202,204,205,206,401,500);
-				localMonitor.start();
-			}
-		}
-		protected function setConnectionLocal(event:StatusEvent):void {
-			var value:Boolean = event.code == "Service.available" ? true : false;
-			if (connectionLocalAvailable != value) {
-				connectionLocalAvailable = value;
-				setConnectionMode();
-			}
-		}*/
 		//protected var localReq:URLRequest;
 		protected function startLocalPoller(event:Event=null):void {
 			if (hostIP == null){
@@ -600,13 +573,7 @@ package vos {
 			connectionMercuryAvailable = value;
 			setConnectionMode();
 		}
-		/*private function mercuryCompleteHandler(event:Event):void {
-			trace("Host mercuryCompleteHandler "+(event ? event.toString()+" data: "+event.target.data : ""));
-			if (connectionMercuryAvailable != true) {
-				connectionMercuryAvailable = true;
-				setConnectionMode();
-			}
-		}*/
+		
 		protected function mercuryIoErrorHandler(event:IOErrorEvent):void {
 			//trace("HOST mercuryIoErrorHandler "+(event ? event.toString()+" data: "+event.target.data : ""));
 			mercuryMonitorLastResponse.time = new Date().time;
@@ -625,22 +592,6 @@ package vos {
 			}
 			setConnectionMode();
 		}
-		
-		/*protected function startPortalPoller():void {
-			if (internetMonitor && internetMonitor.running) {
-				internetMonitor.stop();
-			}
-			internetMonitor = new URLMonitor(new URLRequest("http://www.google.com")); // internet so portal can be reached => this is an abstraction!!!
-			internetMonitor.addEventListener(StatusEvent.STATUS, setConnectionPortal);
-			internetMonitor.start();
-		}
-		protected function setConnectionPortal(event:StatusEvent):void {
-			var value:Boolean = event.code == "Service.available" ? true : false;
-			if (connectionPortalAvailable != value) {
-				connectionPortalAvailable = value;
-				setConnectionMode();
-			}
-		}*/
 		
 		protected function startPortalPoller(event:Event=null):void {
 			portalMonitorTimer.delay = portalMonitorDelay;
@@ -1181,19 +1132,6 @@ package vos {
 				
 			}
 		}
-		
-		/*public function configurationState():String {
-		if (hostIP && hostIP == lanIP && wifiIP == DEFAULTWIFIIPADDRESS) {
-		return CONFIG_LAN_WIFI_NOT_SET;
-		} else if (hostIP && hostIP == lanIP && (wifiIP && wifiIP != DEFAULTWIFIIPADDRESS)) {
-		return CONFIG_LAN_WIFI_SET;
-		} else if (hostIP && hostIP == wifiIP && wifiIP == DEFAULTWIFIIPADDRESS) {
-		return CONFIG_WIFI_WIFI_NOT_SET;
-		} else if (hostIP && hostIP == wifiIP && (wifiIP && wifiIP != DEFAULTWIFIIPADDRESS)) {
-		return CONFIG_WIFI_WIFI_SET;
-		}
-		return "";
-		}*/
 		
 		public function basicAuthorizationString():String{
 			if (basicAuthName && basicAuthPassword){
@@ -1833,51 +1771,6 @@ package vos {
 			//setConnectionState();
 		}
 		
-		/*public function get connectedWifiAP():Boolean
-		{
-			return _connectedWifiAP;
-		}
-		
-		public function set connectedWifiAP(value:Boolean):void
-		{
-			_connectedWifiAP = value;
-			//setConnectionState();
-		}*/
-		
-		/*protected function setConnectionState():void {
-			if (!connectedLan && !connectedWifi && !connectedWifiAP) {
-				connectionState = "NO";
-				connected = false;
-			} else if (connectedLan && !connectedWifi && !connectedWifiAP) {
-				connectionState = "LAN";
-				connected = true;
-			} else if (connectedLan && connectedWifi && !connectedWifiAP) {
-				connectionState = "LAN+WIFI";
-				connected = true;
-			} else if (connectedLan && !connectedWifi && connectedWifiAP) {
-				connectionState = "LAN+WIFIAP";
-				connected = true;
-			} else if (!connectedLan && connectedWifi && !connectedWifiAP && wifiIP != DEFAULTWIFIIPADDRESS) {
-				connectionState = "WIFI";
-				connected = true;
-			} else if (connectedWifiAP) {
-				connectionState = "WIFIAP";
-				//connected = false;
-			} else if (connectedLan && connectedWifi && wifiIP != DEFAULTWIFIIPADDRESS && connectedWifiAP) {
-				connectionState = "LAN+WIFI+WIFIAP";
-				connected = true;
-			} else if (connectedWifi && wifiIP == DEFAULTWIFIIPADDRESS) {
-				connectionState = "NO";
-				//wifiIP = "";
-			}
-			if (_connectedWifi && wifiIP != DEFAULTWIFIIPADDRESS) {
-				_connectedWifiNotAP = true;
-			} else {
-				_connectedWifiNotAP = false;
-			}
-			trace("Host "+typeName+" ConnectionState set to: " + connectionState + " connected="+connected);
-		}*/
-		
 		protected function setConnectionState():void {
 			var tempConnectionState:String = connectionState;
 			if ((connectionLocalAvailable || connectionMercuryAvailable) && state() == STATE_LAN_USAGE && connectionApAvailable) {
@@ -2108,16 +2001,6 @@ package vos {
 			_htmlApiNameSpace = value;
 		}
 
-		/*public function get connectedMercury():Boolean
-		{
-			return _connectedMercury;
-		}
-
-		public function set connectedMercury(value:Boolean):void
-		{
-			_connectedMercury = value;
-		}*/
-
 		/** contains: none, local, mercury or portal	 */
 		[Bindable(event="connectionModeChanged")]
 		public function get connectionMode():String
@@ -2191,6 +2074,26 @@ package vos {
 				_connectionApAvailable = value;
 			}
 			//connectedWifiAP = _connectionApAvailable;
+		}
+
+		public function get slots():ArrayCollection
+		{
+			return _slots;
+		}
+
+		public function set slots(value:ArrayCollection):void
+		{
+			_slots = value;
+		}
+
+		public function get label():String
+		{
+			return _label;
+		}
+
+		public function set label(value:String):void
+		{
+			_label = value;
 		}
 		
 		

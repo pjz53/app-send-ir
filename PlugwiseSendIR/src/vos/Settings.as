@@ -7,7 +7,8 @@ package vos
 	import flash.utils.IExternalizable;
 	
 	import mx.collections.ArrayCollection;
-
+	
+	[Bindable]
 	public class Settings extends EventDispatcher implements IExternalizable
 	{
 		
@@ -19,6 +20,7 @@ package vos
 		private var _savedState:String;
 		private var _presetCollection:ArrayCollection;
 		private var _scheduleCollection:ArrayCollection;
+		private var _gatewaysCollection:ArrayCollection;
 		private var _hostIp:String;
 		private var _useCloudBackground:Boolean;
 		private var _savingsProfileIndex:int = 1;
@@ -46,6 +48,7 @@ package vos
 			savedState:String="",
 			presetCollection:ArrayCollection=null,
 			scheduleCollection:ArrayCollection=null,
+			gatewaysCollection:ArrayCollection=null,
 			introExplanationSeen:Boolean=false,
 			hostIp:String="",
 			useCloudBackground:Boolean=false,
@@ -59,6 +62,7 @@ package vos
 			_savedState = savedState;
 			_presetCollection = presetCollection;
 			_scheduleCollection = scheduleCollection;
+			_gatewaysCollection = gatewaysCollection;
 			_introExplanationSeen = introExplanationSeen;
 			_hostIp = hostIp;
 			_useCloudBackground = useCloudBackground;
@@ -75,6 +79,7 @@ package vos
 			output.writeUTF(savedState);
 			output.writeObject(presetCollection);
 			output.writeObject(scheduleCollection);
+			output.writeObject(gatewaysCollection);
 			output.writeBoolean(introExplanationSeen);
 			output.writeUTF(hostIp);
 			
@@ -92,9 +97,9 @@ package vos
 			output.writeInt(weekendGetUpTemp);
 			output.writeInt(weekendSleepFromTemp);
 
-			output.writeBoolean(useCloudBackground);
-			output.writeInt(savingsProfileIndex);
-			output.writeInt(selectedScenarioIndex);
+			//output.writeBoolean(useCloudBackground);
+			//output.writeInt(savingsProfileIndex);
+			//output.writeInt(selectedScenarioIndex);
 		}
 		
 		public function readExternal(input:IDataInput):void {
@@ -109,6 +114,7 @@ package vos
 				presetCollection = input.readObject();
 				var tempScheduleCollection:ArrayCollection;
 				tempScheduleCollection = input.readObject();
+				gatewaysCollection = input.readObject();
 				introExplanationSeen = input.readBoolean();
 				hostIp = input.readUTF();
 				
@@ -126,9 +132,9 @@ package vos
 				weekendGetUpTemp = input.readInt();
 				weekendSleepFromTemp = input.readInt();
 
-				useCloudBackground = input.readBoolean();
-				savingsProfileIndex = input.readInt();
-				selectedScenarioIndex = input.readInt();
+				//useCloudBackground = input.readBoolean();
+				//savingsProfileIndex = input.readInt();
+				//selectedScenarioIndex = input.readInt();
 				
 				//make general objects into Edge objects:
 				scheduleCollection = new ArrayCollection();
@@ -392,6 +398,16 @@ package vos
 		public function set selectedScenarioIndex(value:int):void
 		{
 			_selectedScenarioIndex = value;
+		}
+
+		public function get gatewaysCollection():ArrayCollection
+		{
+			return _gatewaysCollection;
+		}
+
+		public function set gatewaysCollection(value:ArrayCollection):void
+		{
+			_gatewaysCollection = value;
 		}
 
 		

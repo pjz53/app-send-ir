@@ -5,7 +5,6 @@ package models
 	import flash.events.Event;
 	import flash.events.HTTPStatusEvent;
 	import flash.events.IOErrorEvent;
-	import flash.events.TimerEvent;
 	import flash.net.URLLoader;
 	import flash.net.URLLoaderDataFormat;
 	import flash.net.URLRequest;
@@ -13,7 +12,6 @@ package models
 	import flash.net.navigateToURL;
 	import flash.system.Capabilities;
 	import flash.utils.ByteArray;
-	import flash.utils.Timer;
 	
 	import mx.collections.ArrayCollection;
 	import mx.core.UIComponent;
@@ -25,14 +23,13 @@ package models
 	import mx.utils.ObjectProxy;
 	import mx.utils.UIDUtil;
 	
-	import spark.components.RadioButtonGroup;
-	
 	import events.EdgeEvent;
 	import events.SettingsEvent;
 	
 	import vos.Edge;
-	import vos.Host;
+	import vos.Gateway;
 	import vos.Settings;
+	import vos.Slot;
 	
 	[Bindable]
 	public class SendIRModel extends UIComponent
@@ -99,7 +96,7 @@ package models
 			{icon:Vakantie, temperature:6, name:"Vakantie"}
 		]);*/
 		
-		public var defaultDevices:ArrayCollection = new ArrayCollection([
+		public var defaultGateways:ArrayCollection = new ArrayCollection([
 			{name:"Airco 1", activatedPreset:"off"},
 			{name:"Airco 2", activatedPreset:"high"},
 			{name:"Airco 3", activatedPreset:"low"}
@@ -118,14 +115,12 @@ package models
 		]);
 		
 		public var defaultPresets:ArrayCollection = new ArrayCollection([
-			{name:"off"},
-			{name:"high"},
-			{name:"low"}
+			new Slot("off"),
+			new Slot("high"),
+			new Slot("low")
 		]);
 		
-		/*public var profileHousingType:RadioButtonGroup = new RadioButtonGroup();
-		public var profileSavingsType:RadioButtonGroup = new RadioButtonGroup();*/
-		
+		public var selectedGateway:Object;
 		
 		public function SendIRModel()
 		{
@@ -148,40 +143,6 @@ package models
 			}
 			return instance;
 		}
-		
-		/*public function setScenario(ind:int = -1):void{
-			if (ind < 0){
-				ind = scenarioIndex;
-			} else if (ind > settings.presetCollection.length){
-				ind = 1;	
-			}
-			scenarioIndex 	= ind;
-			tempSet 		= getScenarioTemp(ind);
-			if (ind > 0){
-				scenarioLast 	= Math.max(1,ind);
-				selectedScenarioPreset = settings.presetCollection.getItemAt(scenarioLast-1);
-			}
-			setSettings();
-		}*/
-		
-		/*public function getScenarioTemp(ind:int = -1):Number{
-			var presetTemp:Number;
-			if (ind < 0) ind = scenarioIndex;
-			if (ind == 0){ // schedule
-				presetTemp = scheduleTemp;
-			} else { // preset
-				presetTemp = Number(settings.presetCollection.getItemAt(ind - 1).temperature)
-			}
-			return presetTemp;
-		}
-		
-		public function setOverRule():void{
-			if (getScenarioTemp() != tempSet){
-				overruleActive = true;
-			} else {
-				overruleActive = false;
-			}
-		}*/
 		
 		public function getApplicationVersion():String{
 			var appXML:XML = NativeApplication.nativeApplication.applicationDescriptor;
@@ -219,6 +180,11 @@ package models
 				settings = new Settings();
 				settings.readExternal(settingsBA);
 				// set runtime variables based on settings
+				
+				if (!settings.gatewaysCollection || settings.gatewaysCollection.length != 3) {
+					settings.gatewaysCollection = setDefaultGateways();
+				}
+				
 				//setScenario(settings.selectedScenarioIndex);
 				
 			} else {
@@ -232,6 +198,11 @@ package models
 					settings.savedState = "main";
 					//settings.presetCollection = new ArrayCollection(defaultScenarios.source);
 					settings.scheduleCollection = new ArrayCollection();//arrayCollection of Edges
+					settings.gatewaysCollection = setDefaultGateways();
+					
+
+					
+					
 					/*new ArrayCollection([{time:0, temperature:21.5},
 					{time:10000, temperature:20},{time:20000, temperature:18.5},{time:30000, temperature:21.5},
 					{time:40000, temperature:17},{time:50000, temperature:15.5}]);*/
@@ -261,6 +232,43 @@ package models
 				errorText += "\nsaving ELS failed!";
 			}
 			
+		}
+		
+		private function setDefaultGateways(ac:ArrayCollection=null):ArrayCollection {
+			if (!ac) {
+				ac = new ArrayCollection();
+			}
+			var gateway:Gateway = new Gateway("Ruimte 1","smile_ir");
+			gateway.slots = new ArrayCollection();
+			gateway.slots.addItem(new Slot(null, "low"));
+			gateway.slots.addItem(new Slot(null, "high"));
+			gateway.slots.addItem(new Slot(null, "off"));
+			ac.addItem(gateway);
+			
+			gateway = new Gateway("Ruimte 2","smile_ir");
+			gateway.slots = new ArrayCollection();
+			gateway.slots.addItem(new Slot(null, "off"));
+			gateway.slots.addItem(new Slot(null, "high"));
+			gateway.slots.addItem(new Slot(null, "low"));
+			gateway.slots.addItem(new Slot(null, "eco"));
+			ac.addItem(gateway);
+			
+			gateway = new Gateway("Ruimte 3","smile_ir");
+			gateway.slots = new ArrayCollection();
+			gateway.slots.addItem(new Slot(null, "low"));
+			gateway.slots.addItem(new Slot(null, "high"));
+			gateway.slots.addItem(new Slot(null, "night"));
+			gateway.slots.addItem(new Slot(null, "off"));
+			ac.addItem(gateway);
+			
+			/*gateway = new Gateway("Ruimte 4","smile_ir");
+			gateway.slots = new ArrayCollection();
+			gateway.slots.addItem(new Slot(null, "off"));
+			gateway.slots.addItem(new Slot(null, "low"));
+			gateway.slots.addItem(new Slot(null, "high"));
+			ac.addItem(gateway);*/
+			
+			return ac;
 		}
 		
 		public function setEdgeInScheduleCollection(event:EdgeEvent):void {
@@ -379,7 +387,7 @@ package models
 		GET     ir/geslots/
 		*/
 		
-		public function getSlots(host:Host, action:String="getSlots"):void {
+		public function getSlots(host:Gateway, action:String="getSlots"):void {
 			// ir/slots/
 			if (!host) return;
 			
@@ -395,7 +403,7 @@ package models
 			token.action = action;
 		}
 		
-		public function deleteSlots(host:Host):void {
+		public function deleteSlots(host:Gateway):void {
 			// ir/slots/
 			if (!host) return;
 			
@@ -413,7 +421,7 @@ package models
 			loader.load(req);
 		}
 		
-		public function getSomeSlot(host:Host, slotName:String=null, action:String="getSomeSlot"):void {
+		public function getSomeSlot(host:Gateway, slotName:String=null, action:String="getSomeSlot"):void {
 			//ir/slots/someslot
 			if (!host || !slotName) return;
 			
@@ -430,7 +438,7 @@ package models
 
 		}
 		
-		public function deleteSomeSlot(host:Host, slotName:String=null, action:String="deleteSomeSlot"):void {
+		public function deleteSomeSlot(host:Gateway, slotName:String=null, action:String="deleteSomeSlot"):void {
 			//ir/slots/someslot
 			if (!host) return;
 			
@@ -449,7 +457,7 @@ package models
 
 		}
 		
-		public function postSomeSlot(host:Host, slotName:String, body:String, action:String="postSomeSlot"):void {
+		public function postSomeSlot(host:Gateway, slotName:String, body:String, action:String="postSomeSlot"):void {
 			//ir/slots/someslot
 			if (!host || !slotName) return;
 			
@@ -466,12 +474,12 @@ package models
 
 		}
 		
-		public function getSchedule(host:Host):void {
+		public function getSchedule(host:Gateway):void {
 			// ir/schedule
 				
 		}
 		
-		public function deleteSchedule(host:Host):void {
+		public function deleteSchedule(host:Gateway):void {
 			// ir/schedule
 			
 		}

@@ -4,7 +4,9 @@
 		creationComplete="creationCompleteHandler(event)"
 		viewActivate="viewActivateHandler(event)"
 		actionBarVisible="false">
-	
+	<s:layout>
+		<s:VerticalLayout gap="0"/>
+	</s:layout>
 	
 	<fx:Script>
 		<![CDATA[
@@ -14,8 +16,11 @@
 			
 			import models.SendIRModel;
 			
+			import vos.Gateway;
+			
+			[Bindable]
 			private var model:SendIRModel;
-						
+									
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				model = SendIRModel.sendIRModel;
@@ -27,9 +32,46 @@
 			}
 			
 			
+			protected function slotList_clickHandler(event:MouseEvent):void
+			{
+				// Send the ir command:
+				
+				model.postSomeSlot(data as Gateway, slotList.selectedItem.label, slotList.selectedItem.body);
+				
+			}
+			
 		]]>
 	</fx:Script>
 	
-	<s:Label id="lbl" horizontalCenter="0" verticalCenter="0" width="95%" visible="{data!=null?true:false}" text="Here are some facts and stats about {data.name}"/>
+	<!--<s:Label id="lbl" width="95%" visible="{data!=null?true:false}" text="{data.label}"/>
+	<s:Spacer height="60"/>-->
+	<s:Label width="90%" text="{'Activate one of the following IR Commands of ' + data.label}" verticalCenter="0" horizontalCenter="0" fontSize="11"/>
+	<s:Line width="100%">
+		<s:stroke>
+			<s:SolidColorStroke color="#cccccc" weight="1"/>
+		</s:stroke>
+	</s:Line>
+	<s:List id="slotList" width="100%" height="100%" click="slotList_clickHandler(event)" 
+			dataProvider="{data.slots}" horizontalScrollPolicy="on" verticalScrollPolicy="off">
+		<s:layout>
+			<s:VerticalLayout gap="0" rowHeight="50"/>
+		</s:layout>
+		<s:itemRenderer>
+			<fx:Component>
+				<s:ItemRenderer width="100%" height="50">
+					<s:layout>
+						<s:BasicLayout/>
+					</s:layout>
+					<s:Label text="{data.label}" color="#000000" verticalCenter="0" horizontalCenter="0"/>
+					<s:Line width="100%" bottom="0">
+						<s:stroke>
+							<s:SolidColorStroke color="#cccccc" weight="1"/>
+						</s:stroke>
+					</s:Line>
+				</s:ItemRenderer>
+			</fx:Component>
+		</s:itemRenderer>
+	</s:List>
+
 	
 </s:View>

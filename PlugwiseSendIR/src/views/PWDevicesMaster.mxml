@@ -14,12 +14,15 @@
 			
 			import models.SendIRModel;
 			
+			
 			[Bindable]
 			private var model:SendIRModel;
 			
 			protected function list_clickHandler(event:MouseEvent):void
 			{
-				(this.parentDocument as PWSendIRHome).devicesDetailNav.activeView.data=deviceslist.selectedItem;
+				(this.parentDocument as PWSendIRHome).devicesDetailNav.activeView.data=gatewaysList.selectedItem;
+				//(this.parentDocument as PWSendIRHome).devicesDetailNav.activeView.data=gatewaysList.selectedItem as Gateway;
+				//model.selectedGateway = gatewaysList.selectedItem;
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
@@ -36,8 +39,8 @@
 		]]>
 	</fx:Script>
 	
-	<s:List id="deviceslist" width="100%" height="100%" click="list_clickHandler(event)" 
-			dataProvider="{model.defaultDevices}" horizontalScrollPolicy="on" verticalScrollPolicy="off">
+	<s:List id="gatewaysList" width="100%" height="100%" click="list_clickHandler(event)" 
+			dataProvider="{model.settings.gatewaysCollection}" horizontalScrollPolicy="on" verticalScrollPolicy="off">
 		<s:layout>
 			<s:HorizontalLayout gap="0" />
 		</s:layout>
@@ -47,7 +50,7 @@
 					<s:layout>
 						<s:BasicLayout/>
 					</s:layout>
-					<s:Label text="{data.name}" horizontalCenter="0" verticalCenter="0"/>
+					<s:Label text="{data.label}" horizontalCenter="0" verticalCenter="0"/>
 					<s:Line height="100%" right="0">
 						<s:stroke>
 							<s:SolidColorStroke color="#cccccc" weight="1"/>

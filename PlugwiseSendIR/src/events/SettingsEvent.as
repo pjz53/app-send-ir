@@ -1,12 +1,12 @@
 package events {
 	import flash.events.Event;
 	
-	import vos.Host;
+	import vos.Gateway;
 	import vos.Settings;
 	
 	public class SettingsEvent extends Event {
 		
-		public var host:Host;
+		public var host:Gateway;
 		public var settings:Settings;
 		public var updateTabs:Boolean;
 		
@@ -40,7 +40,7 @@ package events {
 		public static const HIDEPLUTAB:String = "hidePluTabSettingsEvent";
 		public static const HIDETIPSTAB:String = "hideTipsTabSettingsEvent";
 				
-		public function SettingsEvent(type:String, bubbles:Boolean, host:Host=null, settings:Settings=null, updateTabs:Boolean=true) {
+		public function SettingsEvent(type:String, bubbles:Boolean, host:Gateway=null, settings:Settings=null, updateTabs:Boolean=true) {
 			super(type, bubbles);
 			this.host = host;
 			this.settings = settings;
