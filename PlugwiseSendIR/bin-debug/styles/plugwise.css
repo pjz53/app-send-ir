@@ -1,0 +1,302 @@
+/* CSS file */
+@namespace s "library://ns.adobe.com/flex/spark";
+@namespace mx "library://ns.adobe.com/flex/mx";
+
+@font-face {
+	fontFamily: 			UbuntuNonCff;
+	embed-as-cff:			false;
+	src: 					url("/assets/font/Ubuntu-L.ttf");
+	fontStyle:				normal;
+}
+@font-face {
+	fontFamily: 			UbuntuBoldNonCff;
+	embed-as-cff:			false;
+	src: 					url("/assets/font/Ubuntu-B.ttf");
+	fontStyle:				normal;
+}
+@font-face {
+	fontFamily: 			Ubuntu;
+	embed-as-cff:			true;
+	src: 					url("/assets/font/Ubuntu-L.ttf");
+	fontStyle:				normal;
+}
+@font-face {
+	fontFamily: 			UbuntuBold;
+	embed-as-cff:			true;
+	src: 					url("/assets/font/Ubuntu-B.ttf");
+	fontStyle:				normal;
+}
+
+@font-face {
+	fontFamily: 			tempFont;
+	embed-as-cff:			true;
+	src: 					url("/assets/font/HelveticaNeueLTStd-UltLt.otf");
+	fontStyle:				normal;
+}
+@font-face {
+	fontFamily: 			tempFontSmall;
+	embed-as-cff:			true;
+	src: 					url("/assets/font/HelveticaNeueLTCom-Th.ttf");
+	fontStyle:				normal;
+}
+
+global
+{
+	fontSize: 				18;
+	color:					#333333;
+	fontFamily:				Ubuntu;
+}
+
+s|Application { 
+	locale: 				'nl-NL'; 
+} 
+
+/*s|ActionBar {
+	skinClass:ClassReference("skins.PWActionBarSkin");
+	defaultButtonAppearance: beveled;
+}*/
+
+/*	Fix for selecting first character in text field on iOS */
+s|TextInput{
+	skinClass:				ClassReference("spark.skins.mobile.TextInputSkin");
+	showPromptWhenFocused: 	false;
+	fontFamily:				UbuntuNonCff;
+	fontStyle:				normal;
+	color:					#46a1dd;
+	contentBackgroundAlpha:	1;
+	contentBackgroundColor:	#CCCCCC;
+	borderVisible:			false;
+}
+
+s|ButtonBarButton{
+	fontFamily:				UbuntuNonCff;
+}
+
+s|SpinnerListItemRenderer{
+	fontFamily:				UbuntuNonCff;
+}
+
+s|SpinnerListContainer{
+	skinClass:				ClassReference("skins.WhiteFlatSpinnerListContainerSkin");
+	color:					#46a1dd;
+}
+
+s|RadioButton{
+	fontFamily:				UbuntuNonCff;
+	skinClass:				ClassReference("skins.WhiteFlatCheckBoxSkin");
+	symbolColor:			#82B941;
+}
+
+s|CheckBox{
+	fontFamily:				UbuntuNonCff;
+	skinClass:				ClassReference("skins.WhiteFlatCheckBoxSkin");
+	symbolColor:			#82B941;
+}
+
+.ios7top {
+	top:0;
+}
+
+@media (os-platform: "IOS") {
+	s|ActionBar
+	{
+		paddingTop:20;
+	}
+	.ios7top {
+		top:20;
+	}
+}
+
+s|Callout{
+	skinClass:			ClassReference("skins.CalloutSkin");
+	fontFamily:			UbuntuNonCff;
+	contentBackgroundAppearance:none;
+	contentBackgroundColor: #FFFFFF;
+	contentBackgroundAlpha:1;
+	borderThickness:	0;
+}
+
+.mainMenuItem{
+	color:				#FFFFFF;
+	backgroundColor: 	#7D7D7D;
+	verticalAlign:		middle;
+	horizontalAlign:	center;
+	paddingTop:			15;
+	paddingLeft:		10;
+}
+.mainMenuItemOver{
+	color:				#FFFFFF;
+	backgroundColor: 	#333333;
+}
+
+.menuItem{
+	color:				#7D7D7D;
+	backgroundColor: 	#FFFFFF;
+	verticalAlign:		middle;
+	horizontalAlign:	center;
+	paddingTop:			15;
+	paddingLeft:		10;
+}
+.menuItemOver{
+	color:				#333333;
+	backgroundColor: 	#CCCCCC;
+}
+
+.greenText{
+	color:				#82B941;
+}
+.microText{
+	fontSize:				6;
+}
+.microTextWhite{
+	fontSize:				6;
+	color:					#fff;
+}
+.microTextBold{
+	fontSize:				6;
+	fontFamily:				UbuntuBold;
+}
+.microTextBoldWhite{
+	fontSize:				6;
+	fontFamily:				UbuntuBold;
+	color:					#fff;
+}
+.minimiText{
+	fontSize:				8;
+}
+.minimiTextWhite{
+	fontSize:				8;
+	color:					#fff;
+}
+.minimiTextBold{
+	fontSize:				8;
+	fontFamily:				UbuntuBold;
+}
+.minimiTextBoldWhite{
+	fontSize:				8;
+	fontFamily:				UbuntuBold;
+	color:					#fff;
+}
+.miniText{
+	fontSize:				10;
+}
+.miniTextWhite{
+	fontSize:				10;
+	color:					#fff;
+}
+.miniTextBold{
+	fontSize:				10;
+	fontFamily:				UbuntuBold;
+}
+.miniTextBoldWhite{
+	fontSize:				10;
+	fontFamily:				UbuntuBold;
+	color:					#fff;
+}
+.miniTextBoldGreen{
+	fontSize:				10;
+	fontFamily:				UbuntuBold;
+	color:					#82B941;
+}
+.smallText{
+	fontSize:				14;
+}
+.smallTextWhite{
+	fontSize:				14;
+	color:					#fff;
+}
+.smallTextBold{
+	fontSize:				14;
+	fontFamily:				UbuntuBold;
+}
+.smallTextBoldWhite{
+	fontSize:				14;
+	fontFamily:				UbuntuBold;
+	color:					#fff;
+}
+.normalText{
+	fontSize:				16;
+}
+.normalTextItalic{
+	fontSize:				16;
+	fontStyle:				"italic";
+}
+.normalTextBold{
+	fontSize:				16;
+	fontFamily:				UbuntuBold;
+}
+.normalTextWhite{
+	fontSize:				16;
+	color:					#fff;
+}
+.normalTextWhiteItalic{
+	fontSize:				16;
+	color:					#fff;
+	fontStyle:				"italic";
+}
+.normalTextBoldWhite{
+	fontSize:				16;
+	color:					#fff;
+	fontFamily:				UbuntuBold;
+}
+.mediumText{
+	fontSize:				24;
+}
+.mediumTextWhite{
+	fontSize:				24;
+	color:					#fff;
+}
+.mediumTextBold{
+	fontSize:				24;
+	fontFamily:				UbuntuBold;
+}
+.mediumTextBoldWhite{
+	fontSize:				24;
+	fontFamily:				UbuntuBold;
+	color:					#fff;
+}
+.bigText{
+	fontSize:				28;
+}
+.bigTextBold{
+	fontSize:				28;
+	fontFamily:				UbuntuBold;
+}
+.bigTextWhite{
+	fontSize:				28;
+	color:					#fff;
+}
+.bigTextBoldWhite{
+	fontSize:				28;
+	color:					#fff;
+	fontFamily:				UbuntuBold;
+}
+.prettyBigText{
+	fontSize:				36;
+}
+.prettyBigTextBold{
+	fontSize:				36;
+	fontFamily:				UbuntuBold;
+}
+.veryBigText{
+	fontSize:				48;
+}
+.veryBigTextBold{
+	fontSize:				48;
+	fontFamily:				UbuntuBold;
+}
+.hugeText{
+	fontSize:				64;
+}
+.hugeTextBold{
+	fontSize:				64;
+	fontFamily:				UbuntuBold;
+}
+.meterReadingText{
+	fontSize:				20;
+	color:					#fff;
+}
+.headingText{
+	fontSize:				18;
+	color:					#fff;
+}
