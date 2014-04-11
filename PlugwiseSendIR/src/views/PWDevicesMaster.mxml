@@ -3,13 +3,17 @@
 		xmlns:s="library://ns.adobe.com/flex/spark"
 		creationComplete="creationCompleteHandler(event)"
 		viewActivate="viewActivateHandler(event)"
-		actionBarVisible="false">
+		actionBarVisible="false"
+		>
 	
 	
 	<fx:Script>
 		<![CDATA[
 			import mx.events.FlexEvent;
 			
+			import spark.components.SplitViewNavigator;
+			import spark.components.ViewNavigator;
+			import spark.events.IndexChangeEvent;
 			import spark.events.ViewNavigatorEvent;
 			
 			import models.SendIRModel;
@@ -18,16 +22,34 @@
 			[Bindable]
 			private var model:SendIRModel;
 			
-			protected function list_clickHandler(event:MouseEvent):void
+			protected function list_clickHandler(event:IndexChangeEvent):void
 			{
 				(this.parentDocument as PWSendIRHome).devicesDetailNav.activeView.data=gatewaysList.selectedItem;
 				//(this.parentDocument as PWSendIRHome).devicesDetailNav.activeView.data=gatewaysList.selectedItem as Gateway;
-				//model.selectedGateway = gatewaysList.selectedItem;
+				model.selectedGateway = gatewaysList.selectedItem;
+			}
+			
+			protected function list_changeHandler(event:IndexChangeEvent):void {
+				// Create a reference to the SplitViewNavigator.
+				var splitNavigator:SplitViewNavigator = navigator.parentNavigator as SplitViewNavigator;
+				// Create a reference to the ViewNavigator for the Detail frame.
+				var detailNavigator:ViewNavigator = splitNavigator.getViewNavigatorAt(1) as ViewNavigator;
+				// Change the view of the Detail frame based on the selected List item.
+				detailNavigator.pushView(PWDeviceDetail, gatewaysList.selectedItem,null,transCover);
+				
+				splitNavigator.hideViewNavigatorPopUp();
+				
+				model.selectedGateway = gatewaysList.selectedItem;
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
 			{
 				model = SendIRModel.sendIRModel;
+				
+				gatewaysList.selectedIndex = 0;
+				list_clickHandler(new IndexChangeEvent(IndexChangeEvent.CHANGE,false,false,-1,0));
+				
+				addEventListener("editButtonEvent", pushEditView);
 			}
 			
 			protected function viewActivateHandler(event:ViewNavigatorEvent):void
@@ -35,23 +57,59 @@
 				
 			}
 			
+			protected function pushEditView(event:Event):void {
+				// Create a reference to the SplitViewNavigator.
+				var splitNavigator:SplitViewNavigator = navigator.parentNavigator as SplitViewNavigator;
+				// Create a reference to the ViewNavigator for the Detail frame.
+				var detailNavigator:ViewNavigator = splitNavigator.getViewNavigatorAt(1) as ViewNavigator;
+				// Change the view of the Detail frame based on the selected List item.
+				detailNavigator.pushView(PWDeviceEdit, gatewaysList.selectedItem,null,transCover);
+				
+				splitNavigator.hideViewNavigatorPopUp();
+				
+				model.selectedGateway = gatewaysList.selectedItem;
+			}
+			
 			
 		]]>
 	</fx:Script>
 	
-	<s:List id="gatewaysList" width="100%" height="100%" click="list_clickHandler(event)" 
-			dataProvider="{model.settings.gatewaysCollection}" horizontalScrollPolicy="on" verticalScrollPolicy="off">
+	<fx:Declarations>
+		<s:SlideViewTransition id="transUp" direction="up"/>
+		<s:SlideViewTransition id="transDown" direction="down"/>
+		<s:SlideViewTransition id="transUncover" mode="uncover" />
+		<s:SlideViewTransition id="transCover" direction="down" mode="cover" duration="100"/>
+	</fx:Declarations>
+	
+	<s:List id="gatewaysList" width="100%" height="100%" change="list_changeHandler(event)"
+			dataProvider="{model.settings.gatewaysCollection}" horizontalScrollPolicy="off" verticalScrollPolicy="on">
 		<s:layout>
-			<s:HorizontalLayout gap="0" />
+			<s:VerticalLayout gap="0" rowHeight="70" requestedRowCount="-1"/>
 		</s:layout>
 		<s:itemRenderer>
 			<fx:Component>
-				<s:ItemRenderer width="120" height="100%">
+				<s:ItemRenderer width="100%" height="100%">
 					<s:layout>
 						<s:BasicLayout/>
 					</s:layout>
-					<s:Label text="{data.label}" horizontalCenter="0" verticalCenter="0"/>
-					<s:Line height="100%" right="0">
+					
+					
+					<fx:Script>
+						<![CDATA[
+							protected function editButton_clickHandler(event:MouseEvent):void
+							{
+								// send Event to push the edit view:
+								dispatchEvent(new Event("editButtonEvent",true));
+								
+							}
+						]]>
+					</fx:Script>
+					
+					<s:Group width="100%" height="60">
+						<s:Label text="{data.label}" verticalCenter="0" left="10" width="100%"/>
+						<s:Button id="editButton" label="Edit" width="60" height="35" right="10" verticalCenter="0" click="editButton_clickHandler(event)"/>
+					</s:Group>
+					<s:Line width="{this.width}" bottom="0">
 						<s:stroke>
 							<s:SolidColorStroke color="#cccccc" weight="1"/>
 						</s:stroke>
@@ -60,9 +118,9 @@
 			</fx:Component>
 		</s:itemRenderer>
 	</s:List>
-	<s:Line width="100%" bottom="0">
+	<!--<s:Line width="100%" bottom="0">
 		<s:stroke>
 			<s:SolidColorStroke color="#cccccc" weight="1"/>
 		</s:stroke>
-	</s:Line>
+	</s:Line>-->
 </s:View>

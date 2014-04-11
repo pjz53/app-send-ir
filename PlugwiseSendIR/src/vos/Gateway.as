@@ -1,5 +1,5 @@
 package vos {
-	
+		
 	import flash.events.Event;
 	import flash.events.EventDispatcher;
 	import flash.events.HTTPStatusEvent;
@@ -15,6 +15,7 @@ package vos {
 	import mx.collections.XMLListCollection;
 	import mx.core.FlexGlobals;
 	import mx.utils.Base64Encoder;
+	import mx.utils.UIDUtil;
 	
 	import models.Feature;
 	import models.SendIRModel;
@@ -171,7 +172,12 @@ package vos {
 		
 		public var appCurrentlyActive:Boolean = true;
 		
-		private var _slots:ArrayCollection;// arrayCollection of Slot objects
+		private var _irCommands:ArrayCollection;// arrayCollection of Slot objects
+		private var _scheduleCollection:ArrayCollection;// arrayCollection of Slot objects
+		
+		private var _useLed:String;
+		private var _brand:String;
+		private var _model:String;
 		
 		public function Gateway(
 			label:String,
@@ -215,7 +221,11 @@ package vos {
 			firstDataDate:Date = null,
 			gatewayFeatures:XMLListCollection=null,
 			hardwareType:String=null,
-			slots:ArrayCollection=null
+			irCommands:ArrayCollection=null,
+			scheduleCollection:ArrayCollection=null,
+			useLed:String=null,
+			brand:String=null,
+			model:String=null
 		) {
 			
 			_label = label;
@@ -250,7 +260,13 @@ package vos {
 			_mercuryAccessKey = mercuryAccessKey;
 			_useMercury = useMercury;
 			_timeDiff = timeDiff;
-			_gatewayUuid = gatewayUuid;
+			//_gatewayUuid = gatewayUuid;
+			if (gatewayUuid == null) {
+				var myPattern:RegExp = /-/g;
+				_gatewayUuid = UIDUtil.createUID().replace(myPattern,"").toLowerCase();
+			} else {
+				_gatewayUuid = gatewayUuid;
+			}
 			_licenseUuid = licenseUuid;
 			_setupNetworkVia = setupNetworkVia;
 			_firmwareUpgradeInProgress = firmwareUpgradeInProgress;
@@ -259,7 +275,11 @@ package vos {
 			_firstDataDate = firstDataDate;
 			_gatewayFeatures = gatewayFeatures;
 			_hardwareType = hardwareType;
-			_slots = slots;
+			_irCommands = irCommands;
+			_scheduleCollection = scheduleCollection;
+			_useLed = useLed;
+			_brand = brand;
+			_model = model;
 			
 			//now initialize a connectionMonitor or start monitors:
 			//if availability changes set the mode
@@ -282,6 +302,47 @@ package vos {
 			referenceCount++;
 			
 			SendIRModel.traceHttpResponse("Number of Host instances is now: " + referenceCount);
+		}
+		
+		public function fill(obj:Object):void
+		{
+			for (var i:String in obj)
+			{
+				if (i != null){
+					switch (i) {
+						case "schedules":
+							scheduleCollection = new ArrayCollection();
+							for each (var eObj:Object in obj[i]) 
+							{
+								// we get edges here with an irCommand and a start time
+								var eIRCommand:IRCommand = new IRCommand(eObj.id,eObj.label,eObj.type,eObj.irCommand);
+								var edge:Edge = new Edge(eIRCommand, eObj.timeSinceStartOfWeek);
+								scheduleCollection.addItem(edge);
+							}
+							break;
+						case "irCommands":
+							irCommands = new ArrayCollection();
+							for each (var ircObj:Object in obj[i]) 
+							{
+								// we get edges here with an irCommand and a start time
+								var ircIRCommand:IRCommand = new IRCommand(ircObj.id,ircObj.label,ircObj.type,ircObj.irCommand);
+								irCommands.addItem(ircIRCommand);
+							}
+							break;
+						default:
+							try {
+								if (i.indexOf("Date") > -1 && this[i]){
+									this[i].time = obj[i] * 1000;
+								} else {
+									this[i] = obj[i];
+								}
+							} 
+							catch (e:Error){
+								// don't crash
+							}
+					}
+				}
+			}
 		}
 		
 		//protected var localReq:URLRequest;
@@ -2076,14 +2137,14 @@ package vos {
 			//connectedWifiAP = _connectionApAvailable;
 		}
 
-		public function get slots():ArrayCollection
+		public function get irCommands():ArrayCollection
 		{
-			return _slots;
+			return _irCommands;
 		}
 
-		public function set slots(value:ArrayCollection):void
+		public function set irCommands(value:ArrayCollection):void
 		{
-			_slots = value;
+			_irCommands = value;
 		}
 
 		public function get label():String
@@ -2094,6 +2155,46 @@ package vos {
 		public function set label(value:String):void
 		{
 			_label = value;
+		}
+
+		public function get scheduleCollection():ArrayCollection
+		{
+			return _scheduleCollection;
+		}
+
+		public function set scheduleCollection(value:ArrayCollection):void
+		{
+			_scheduleCollection = value;
+		}
+
+		public function get useLed():String
+		{
+			return _useLed;
+		}
+
+		public function set useLed(value:String):void
+		{
+			_useLed = value;
+		}
+
+		public function get brand():String
+		{
+			return _brand;
+		}
+
+		public function set brand(value:String):void
+		{
+			_brand = value;
+		}
+
+		public function get model():String
+		{
+			return _model;
+		}
+
+		public function set model(value:String):void
+		{
+			_model = value;
 		}
 		
 		

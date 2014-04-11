@@ -28,8 +28,8 @@ package models
 	
 	import vos.Edge;
 	import vos.Gateway;
+	import vos.IRCommand;
 	import vos.Settings;
-	import vos.Slot;
 	
 	[Bindable]
 	public class SendIRModel extends UIComponent
@@ -115,12 +115,12 @@ package models
 		]);
 		
 		public var defaultPresets:ArrayCollection = new ArrayCollection([
-			new Slot("off"),
-			new Slot("high"),
-			new Slot("low")
+			new IRCommand("off"),
+			new IRCommand("high"),
+			new IRCommand("low")
 		]);
 		
-		public var selectedGateway:Object;
+		public var selectedGateway:Gateway;
 		
 		public function SendIRModel()
 		{
@@ -181,7 +181,7 @@ package models
 				settings.readExternal(settingsBA);
 				// set runtime variables based on settings
 				
-				if (!settings.gatewaysCollection || settings.gatewaysCollection.length != 3) {
+				if (!settings.gatewaysCollection || settings.gatewaysCollection.length != 4) {
 					settings.gatewaysCollection = setDefaultGateways();
 				}
 				
@@ -238,35 +238,35 @@ package models
 			if (!ac) {
 				ac = new ArrayCollection();
 			}
-			var gateway:Gateway = new Gateway("Ruimte 1","smile_ir");
-			gateway.slots = new ArrayCollection();
-			gateway.slots.addItem(new Slot(null, "low"));
-			gateway.slots.addItem(new Slot(null, "high"));
-			gateway.slots.addItem(new Slot(null, "off"));
+			var gateway:Gateway = new Gateway("Airco 1","smile_ir");
+			gateway.irCommands = new ArrayCollection();
+			gateway.irCommands.addItem(new IRCommand(null, "low"));
+			gateway.irCommands.addItem(new IRCommand(null, "high"));
+			gateway.irCommands.addItem(new IRCommand(null, "off"));
 			ac.addItem(gateway);
 			
-			gateway = new Gateway("Ruimte 2","smile_ir");
-			gateway.slots = new ArrayCollection();
-			gateway.slots.addItem(new Slot(null, "off"));
-			gateway.slots.addItem(new Slot(null, "high"));
-			gateway.slots.addItem(new Slot(null, "low"));
-			gateway.slots.addItem(new Slot(null, "eco"));
+			gateway = new Gateway("Airco 2","smile_ir");
+			gateway.irCommands = new ArrayCollection();
+			gateway.irCommands.addItem(new IRCommand(null, "off"));
+			gateway.irCommands.addItem(new IRCommand(null, "high"));
+			gateway.irCommands.addItem(new IRCommand(null, "low"));
+			gateway.irCommands.addItem(new IRCommand(null, "eco"));
 			ac.addItem(gateway);
 			
-			gateway = new Gateway("Ruimte 3","smile_ir");
-			gateway.slots = new ArrayCollection();
-			gateway.slots.addItem(new Slot(null, "low"));
-			gateway.slots.addItem(new Slot(null, "high"));
-			gateway.slots.addItem(new Slot(null, "night"));
-			gateway.slots.addItem(new Slot(null, "off"));
+			gateway = new Gateway("Airco 3","smile_ir");
+			gateway.irCommands = new ArrayCollection();
+			gateway.irCommands.addItem(new IRCommand(null, "low"));
+			gateway.irCommands.addItem(new IRCommand(null, "high"));
+			gateway.irCommands.addItem(new IRCommand(null, "night"));
+			gateway.irCommands.addItem(new IRCommand(null, "off"));
 			ac.addItem(gateway);
 			
-			/*gateway = new Gateway("Ruimte 4","smile_ir");
-			gateway.slots = new ArrayCollection();
-			gateway.slots.addItem(new Slot(null, "off"));
-			gateway.slots.addItem(new Slot(null, "low"));
-			gateway.slots.addItem(new Slot(null, "high"));
-			ac.addItem(gateway);*/
+			gateway = new Gateway("Airco 4","smile_ir");
+			gateway.irCommands = new ArrayCollection();
+			gateway.irCommands.addItem(new IRCommand(null, "off"));
+			gateway.irCommands.addItem(new IRCommand(null, "low"));
+			gateway.irCommands.addItem(new IRCommand(null, "high"));
+			ac.addItem(gateway);
 			
 			return ac;
 		}
@@ -387,13 +387,13 @@ package models
 		GET     ir/geslots/
 		*/
 		
-		public function getSlots(host:Gateway, action:String="getSlots"):void {
+		public function getIRCommands(gateway:Gateway, action:String="getIRCommands"):void {
 			// ir/slots/
-			if (!host) return;
+			if (!gateway) return;
 			
 			var token:AsyncToken = new AsyncToken();
 			
-			service.url = host.hostURL(host.port, "ir/slots/");
+			service.url = gateway.hostURL(gateway.port, "ir/slots/");
 			service.requestTimeout = 0;
 			service.method = URLRequestMethod.GET;
 			service.resultFormat = "e4x";
@@ -401,16 +401,17 @@ package models
 			
 			token = service.send();
 			token.action = action;
+			token.gateway = gateway;
 		}
 		
-		public function deleteSlots(host:Gateway):void {
+		public function deleteIRCommands(gateway:Gateway):void {
 			// ir/slots/
-			if (!host) return;
+			if (!gateway) return;
 			
 			var loader:URLLoader = new URLLoader();
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
-			var req:URLRequest = host.getUrlRequest(null, "ir/slots/");
-			loader.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, deleteSlotsHTTPStatusHandler);
+			var req:URLRequest = gateway.getUrlRequest(null, "ir/slots/");
+			loader.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, deleteIRCommandsHTTPStatusHandler);
 			loader.addEventListener(Event.COMPLETE, urlLoaderCompleteHandler);
 			loader.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
 			req.method = URLRequestMethod.DELETE;
@@ -421,13 +422,13 @@ package models
 			loader.load(req);
 		}
 		
-		public function getSomeSlot(host:Gateway, slotName:String=null, action:String="getSomeSlot"):void {
+		public function getSomeIRCommand(gateway:Gateway, irCommandName:String=null, action:String="getSomeIRCommand"):void {
 			//ir/slots/someslot
-			if (!host || !slotName) return;
+			if (!gateway || !irCommandName) return;
 			
 			var token:AsyncToken = new AsyncToken();
 			
-			service.url = host.hostURL(host.port, "ir/slots/" + slotName);
+			service.url = gateway.hostURL(gateway.port, "ir/slots/" + irCommandName);
 			service.requestTimeout = 0;
 			service.method = URLRequestMethod.GET;
 			service.resultFormat = "e4x";
@@ -435,17 +436,18 @@ package models
 			
 			token = service.send();
 			token.action = action;
-
+			token.host = gateway;
+			token.irCommandName = irCommandName;
 		}
 		
-		public function deleteSomeSlot(host:Gateway, slotName:String=null, action:String="deleteSomeSlot"):void {
+		public function deleteSomeIRCommand(gateway:Gateway, irCommandName:String=null, action:String="deleteSomeIRCommand"):void {
 			//ir/slots/someslot
-			if (!host) return;
+			if (!gateway) return;
 			
 			var loader:URLLoader = new URLLoader();
 			loader.dataFormat = URLLoaderDataFormat.TEXT;
-			var req:URLRequest = host.getUrlRequest(null, "ir/slots/" + slotName);
-			loader.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, deleteSlotsHTTPStatusHandler);
+			var req:URLRequest = gateway.getUrlRequest(null, "ir/slots/" + irCommandName);
+			loader.addEventListener(HTTPStatusEvent.HTTP_RESPONSE_STATUS, deleteIRCommandsHTTPStatusHandler);
 			loader.addEventListener(Event.COMPLETE, urlLoaderCompleteHandler);
 			loader.addEventListener(IOErrorEvent.IO_ERROR, ioErrorHandler);
 			req.method = URLRequestMethod.DELETE;
@@ -457,15 +459,66 @@ package models
 
 		}
 		
-		public function postSomeSlot(host:Gateway, slotName:String, body:String, action:String="postSomeSlot"):void {
+		public function postSomeIRCommand(gateway:Gateway, irCommandName:String, body:String, action:String="postSomeIRCommand"):void {
 			//ir/slots/someslot
-			if (!host || !slotName) return;
+			if (!gateway || !irCommandName) return;
 			
 			var token:AsyncToken = new AsyncToken();
 			
-			service.url = host.hostURL(host.port, "ir/slots/" + slotName);
+			service.url = gateway.hostURL(gateway.port, "ir/slots/" + irCommandName);
 			service.requestTimeout = 0;
 			service.method = URLRequestMethod.POST;
+			//service.resultFormat = "e4x";
+			service.request = body;//parameters
+			
+			token = service.send();
+			token.action = action;
+
+		}
+		
+		public function canRecord(gateway:Gateway, action:String="canRecord"):void {
+			// ir/canrecord
+			if (!gateway) return;
+			
+			var token:AsyncToken = new AsyncToken();
+			
+			service.url = gateway.hostURL(gateway.port, "ir/canrecord");
+			service.requestTimeout = 0;
+			service.method = URLRequestMethod.GET;
+			//service.resultFormat = "e4x";
+			service.request = null;//parameters
+			
+			token = service.send();
+			token.action = action;
+
+		}
+		
+		public function recordSomeIRCommand(gateway:Gateway, irCommandName:String, body:String, action:String="recordSomeIRCommand"):void {
+			// ir/record?slot=someslot
+			if (!gateway || !irCommandName || !body) return;
+			
+			var token:AsyncToken = new AsyncToken();
+			
+			service.url = gateway.hostURL(gateway.port, "ir/record?slot=" + irCommandName);
+			service.requestTimeout = 0;
+			service.method = URLRequestMethod.GET;
+			//service.resultFormat = "e4x";
+			service.request = body;//parameters
+			
+			token = service.send();
+			token.action = action;
+
+		}
+		
+		public function playSomeIRCommand(gateway:Gateway, irCommandName:String, body:String, led:String="up", action:String="playSomeIRCommand"):void {
+			// ir/play?slot=someslot & led={up|side}
+			if (!gateway || !irCommandName || !body) return;
+			
+			var token:AsyncToken = new AsyncToken();
+			
+			service.url = gateway.hostURL(gateway.port, "ir/play?slot=" + irCommandName + "&led=" + led);
+			service.requestTimeout = 0;
+			service.method = URLRequestMethod.GET;
 			//service.resultFormat = "e4x";
 			service.request = body;//parameters
 			
@@ -493,28 +546,59 @@ package models
 			schedule.edges = schedule.edges;//ArrayCollection of class Edge
 		}*/		
 		
-		
+		public function getBeaconForGateway(gateway:Gateway=null):void {
+			if (!gateway && selectedGateway) 
+			{
+				gateway = selectedGateway;
+			}
+			
+			trace("getPortalBeacon ID:"+ gateway.codeSmile);
+			
+			service.resultFormat = "e4x";
+			service.url = "https://beacon.plugwise.net/announce/" + gateway.codeSmile;
+			service.useProxy = false;
+			service.requestTimeout = 0;
+			service.method = "GET";
+			var token:AsyncToken = service.send();
+			token.action = "getBeaconForGateway";
+			token.gateway = gateway;
+		}
 		
 		
 		// ...end Requests
 		
-		private function resultHandler(e:ResultEvent):void{
-			var token:AsyncToken = e.token;
+		private function resultHandler(event:ResultEvent):void{
+			var token:AsyncToken = event.token;
 			if (!token.action) return;
 			
 			trace("SendIRModel resultHandler url="+token.url+":");
-			if (e.result is ObjectProxy && e.result.error){
+			if (event.result is ObjectProxy && event.result.error){
 				// error
-				trace(e.result.error);
+				trace(event.result.error);
 				return;
 			}
 			
 			switch (token.action) {
-				case "getSlots":
-					
+				case "getIRCommands":
+					getIRCommandsHandler(event);
 					break;
-				case "getSomeSlot":
-					
+				case "getSomeIRCommand":
+					getSomeIRCommandHandler(event);
+					break;
+				case "postSomeIRCommand":
+					postSomeIRCommandHandler(event);
+					break;
+				case "canRecord":
+					canRecordHandler(event);
+					break;
+				case "recordSomeIRCommand":
+					recordSomeIRCommandHandler(event);
+					break;
+				case "playSomeIRCommand":
+					playSomeIRCommandHandler(event);
+					break;
+				case "getBeaconForGateway":
+					getBeaconForGatewayHandler(event);
 					break;
 					
 			}
@@ -523,13 +607,39 @@ package models
 			
 		}
 		
-		private function faultHandler(e:FaultEvent):void{
-			var token:AsyncToken = e.token;
+		private function faultHandler(event:FaultEvent):void{
+			var token:AsyncToken = event.token;
 			trace("SendIRModel faultHandler url="+token.url+":");
-			if (e.fault){
+			if (event.fault){
 				// error
-				trace("SendIRModel faultHandler status="+e.statusCode, e.fault.faultCode, e.fault.faultDetail);
+				trace("SendIRModel faultHandler status="+event.statusCode, event.fault.faultCode, event.fault.faultDetail);
 				dispatchEvent(new Event("connectionError"));
+				
+				switch (token.action) {
+					case "getIRCommands":
+						
+						break;
+					case "getSomeIRCommand":
+						
+						break;
+					case "postSomeIRCommand":
+						
+						break;
+					case "canRecord":
+						
+						break;
+					case "recordSomeIRCommand":
+						
+						break;
+					case "playSomeIRCommand":
+						
+						break;
+					case "getBeaconForGateway":
+						
+						break;
+					
+				}
+
 				
 			}
 		}
@@ -540,10 +650,86 @@ package models
 		
 		// HTTPService Handlers...
 		
-		private function getSomeSlotHandler(event:ResultEvent):void {
+		private function getIRCommandsHandler(event:ResultEvent):void {
 			var token:AsyncToken = event.token;
 
 			if (event && event.result && event.result.length() > 0) {
+				
+			}
+			
+		}
+		
+		private function getSomeIRCommandHandler(event:ResultEvent):void {
+			var token:AsyncToken = event.token;
+
+			if (event && event.result && event.result.length() > 0) {
+				//get the content to fill the IRCommand:
+				
+				
+				
+			}
+			
+		}
+		
+		private function postSomeIRCommandHandler(event:ResultEvent):void {
+			var token:AsyncToken = event.token;
+
+			if (event && event.result && event.result.length() > 0) {
+				
+			}
+			
+		}
+		
+		private function canRecordHandler(event:ResultEvent):void {
+			var token:AsyncToken = event.token;
+
+			if (event && event.result && event.result.length() > 0) {
+				
+			}
+			
+		}
+		
+		private function recordSomeIRCommandHandler(event:ResultEvent):void {
+			var token:AsyncToken = event.token;
+
+			if (event && event.result && event.result.length() > 0) {
+				
+			}
+			
+		}
+		
+		private function playSomeIRCommandHandler(event:ResultEvent):void {
+			var token:AsyncToken = event.token;
+
+			if (event && event.result && event.result.length() > 0) {
+				
+			}
+			
+		}
+		
+		private function getBeaconForGatewayHandler(event:ResultEvent):void {
+			var token:AsyncToken = event.token;
+
+			if (event && event.result && event.result.length() > 0) {
+				var configXML:XML = event.result as XML;
+				
+				if (configXML == null) {
+					return;
+				}
+				var gateway:Gateway = token.gateway;
+				
+				gateway.version= configXML.version != "" ? configXML.version : null;
+				if (configXML.lan_ip != ""){
+					gateway.useLan = true;
+					gateway.lanIP 	= String(configXML.lan_ip);
+				} else {
+					gateway.useLan = false;
+					gateway.lanIP 	= null;
+				}
+				gateway.wifiIP = configXML.wifi_ip != "" ? configXML.wifi_ip : null;
+				
+				
+				
 				
 			}
 			
@@ -553,7 +739,7 @@ package models
 		// ...end HTTPService Handlers
 		
 		// URLLoader Handlers...
-		private function deleteSlotsHTTPStatusHandler(event:HTTPStatusEvent):void {
+		private function deleteIRCommandsHTTPStatusHandler(event:HTTPStatusEvent):void {
 			if (event && event.status == 200){
 				
 			} else {
@@ -577,7 +763,20 @@ package models
 		//...end Response Handlers
 		
 		
+		// Utility methods...
 		
+		public function getGatewayByUUID(uuid:String):Gateway {
+			for each (var gateway:Gateway in settings.gatewaysCollection) 
+			{
+				if (gateway.gatewayUuid == uuid) {
+					return gateway;
+				}
+			}
+			return null;
+		}
+		
+		
+		// ...end Utility methods
 		
 		
 		/*private var udp:DatagramSocket;

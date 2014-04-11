@@ -8,10 +8,10 @@ package vos
 	 * 
 	 * @author pjz
 	 * used to save slot by name and retrieve ir command string
-	 * stored used in arrayCollection "slots" of gateway
+	 * stored used in arrayCollection "irCommands" of gateway
 	 */	
 	[Bindable]
-	public class Slot extends EventDispatcher
+	public class IRCommand extends EventDispatcher
 	{
 		public var id:String;// Implemented as UUID
 		private var _label:String;
@@ -19,7 +19,7 @@ package vos
 		private var _irCommand:String;// the string that can be sent to the IR device
 		private var _date:Date = new Date();
 		
-		public function Slot(id:String=null, label:String=null, type:String="smile_ir", irCommand:String=null)
+		public function IRCommand(id:String=null, label:String=null, type:String="smile_ir", irCommand:String=null)
 		{
 			if (id == null) {
 				var myPattern:RegExp = /-/g;

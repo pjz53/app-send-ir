@@ -11,7 +11,7 @@ package vos
 		public var id:String;// Implemented as UUID
 		private var _label:String;
 		//private var _type:String;
-		private var _temperature:Number = 0;
+		private var _irCommand:IRCommand;
 		//private var _date:Date;
 		private var _timeSinceStartOfWeek:int = 0;//time since day 0 (sunday 0:00)
 		private var _timeSinceStartOfDay:int;
@@ -28,7 +28,7 @@ package vos
 		
 		public static const dayMSec:int = 24 * 60 * 60 * 1000;
 		
-		public function Edge(temperature:Number,timeSinceStartOfWeek:Number,x:Number=0)
+		public function Edge(irCommand:IRCommand,timeSinceStartOfWeek:Number,x:Number=0)
 		{
 			if (id == null) {
 				var myPattern:RegExp = /-/g;
@@ -37,23 +37,22 @@ package vos
 				this.id = id;
 			}
 			
-			this.temperature = temperature;
-			//_type = type;
-			//_date = date;
+			this.irCommand = irCommand;
+			
 			this.timeSinceStartOfWeek = timeSinceStartOfWeek;
 			
 			this.x = x;
 			
 		}
 		
-		public function setWithValues(temperature:Number,timeSinceStartOfWeek:Number):void {
-			this.temperature = temperature;
+		public function setWithValues(irCommand:IRCommand,timeSinceStartOfWeek:Number):void {
+			this.irCommand = irCommand;
 			this.timeSinceStartOfWeek = timeSinceStartOfWeek;
 		}
 
 		public function get label():String
 		{
-			_label = temperature.toString();
+			_label = irCommand.toString();
 			return _label;
 		}
 		
@@ -82,14 +81,14 @@ package vos
 			_date = value;
 		}*/
 
-		public function get temperature():Number
+		public function get irCommand():IRCommand
 		{
-			return _temperature;
+			return _irCommand;
 		}
 
-		public function set temperature(value:Number):void
+		public function set irCommand(value:IRCommand):void
 		{
-			_temperature = value;
+			_irCommand = value;
 		}
 
 		public function get x():Number

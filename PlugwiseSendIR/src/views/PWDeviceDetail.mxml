@@ -28,15 +28,18 @@
 			
 			protected function viewActivateHandler(event:ViewNavigatorEvent):void
 			{
-				
+				if (data) {
+					var myGateway:Gateway = model.getGatewayByUUID(data.gatewayUuid);
+					model.getIRCommands(myGateway);
+				}
 			}
 			
 			
 			protected function slotList_clickHandler(event:MouseEvent):void
 			{
 				// Send the ir command:
-				
-				model.postSomeSlot(data as Gateway, slotList.selectedItem.label, slotList.selectedItem.body);
+				var myGateway:Gateway = model.getGatewayByUUID(data.gatewayUuid);
+				model.postSomeIRCommand(myGateway, irCommandList.selectedItem.label, irCommandList.selectedItem.irCommand);
 				
 			}
 			
@@ -51,8 +54,8 @@
 			<s:SolidColorStroke color="#cccccc" weight="1"/>
 		</s:stroke>
 	</s:Line>
-	<s:List id="slotList" width="100%" height="100%" click="slotList_clickHandler(event)" 
-			dataProvider="{data.slots}" horizontalScrollPolicy="on" verticalScrollPolicy="off">
+	<s:List id="irCommandList" width="100%" height="100%" click="slotList_clickHandler(event)" 
+			dataProvider="{data.irCommands}" horizontalScrollPolicy="on" verticalScrollPolicy="off">
 		<s:layout>
 			<s:VerticalLayout gap="0" rowHeight="50"/>
 		</s:layout>
@@ -62,12 +65,17 @@
 					<s:layout>
 						<s:BasicLayout/>
 					</s:layout>
+					<s:Rect left="10" right="10" top="5" bottom="5" radiusX="5" radiusY="5" >
+						<s:stroke>
+							<s:SolidColorStroke color="#cccccc" weight="1" joints="miter"/>
+						</s:stroke>
+					</s:Rect>
 					<s:Label text="{data.label}" color="#000000" verticalCenter="0" horizontalCenter="0"/>
-					<s:Line width="100%" bottom="0">
+					<!--<s:Line width="100%" bottom="0">
 						<s:stroke>
 							<s:SolidColorStroke color="#cccccc" weight="1"/>
 						</s:stroke>
-					</s:Line>
+					</s:Line>-->
 				</s:ItemRenderer>
 			</fx:Component>
 		</s:itemRenderer>

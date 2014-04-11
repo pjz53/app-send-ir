@@ -78,12 +78,12 @@ package vos
 			output.writeUTF(language);
 			output.writeUTF(savedState);
 			output.writeObject(presetCollection);
-			output.writeObject(scheduleCollection);
+			//output.writeObject(scheduleCollection);
 			output.writeObject(gatewaysCollection);
 			output.writeBoolean(introExplanationSeen);
 			output.writeUTF(hostIp);
 			
-			output.writeInt(weekGetUpTime);
+			/*output.writeInt(weekGetUpTime);
 			output.writeInt(weekWorkFromTime);
 			output.writeInt(weekWorkToTime);
 			output.writeInt(weekSleepFromTime);
@@ -95,7 +95,7 @@ package vos
 			output.writeInt(weekWorkToTemp);
 			output.writeInt(weekSleepFromTemp);
 			output.writeInt(weekendGetUpTemp);
-			output.writeInt(weekendSleepFromTemp);
+			output.writeInt(weekendSleepFromTemp);*/
 
 			//output.writeBoolean(useCloudBackground);
 			//output.writeInt(savingsProfileIndex);
@@ -112,13 +112,14 @@ package vos
 				language = input.readUTF();
 				savedState = input.readUTF();
 				presetCollection = input.readObject();
-				var tempScheduleCollection:ArrayCollection;
-				tempScheduleCollection = input.readObject();
-				gatewaysCollection = input.readObject();
+				/*var tempScheduleCollection:ArrayCollection;
+				tempScheduleCollection = input.readObject();*/
+				var tempGatewaysCollection:ArrayCollection;//schedules have been put in gateway
+				tempGatewaysCollection = input.readObject();
 				introExplanationSeen = input.readBoolean();
 				hostIp = input.readUTF();
 				
-				weekGetUpTime = input.readInt();
+				/*weekGetUpTime = input.readInt();
 				weekWorkFromTime = input.readInt();
 				weekWorkToTime = input.readInt();
 				weekSleepFromTime = input.readInt();
@@ -130,19 +131,26 @@ package vos
 				weekWorkToTemp = input.readInt();
 				weekSleepFromTemp = input.readInt();
 				weekendGetUpTemp = input.readInt();
-				weekendSleepFromTemp = input.readInt();
+				weekendSleepFromTemp = input.readInt();*/
 
 				//useCloudBackground = input.readBoolean();
 				//savingsProfileIndex = input.readInt();
 				//selectedScenarioIndex = input.readInt();
 				
-				//make general objects into Edge objects:
-				scheduleCollection = new ArrayCollection();
+				//make general objects into Gateway objects by filling them with the read objects
+				gatewaysCollection = new ArrayCollection();
+				for each (var obj:Object in tempGatewaysCollection) 
+				{
+					var gateway:Gateway = new Gateway(obj.label,obj.type);
+					gateway.fill(obj);
+					gatewaysCollection.addItem(gateway);
+				}
+				/*scheduleCollection = new ArrayCollection();
 				for each (var obj:Object in tempScheduleCollection) 
 				{
 					var edge:Edge = new Edge(obj.temperature, obj.timeSinceStartOfWeek);
 					scheduleCollection.addItem(edge);
-				}
+				}*/
 				
 				
 			} 

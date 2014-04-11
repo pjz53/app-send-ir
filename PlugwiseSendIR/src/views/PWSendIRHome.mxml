@@ -1,21 +1,33 @@
 <?xml version="1.0" encoding="utf-8"?>
 <s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
 	xmlns:s="library://ns.adobe.com/flex/spark" viewActivate="viewActivateHandler(event)"
+	xmlns:main="assets.main.*" 
+	
 	>
 
 	<fx:Script>
 		<![CDATA[
 			import spark.events.ViewNavigatorEvent;
+			
+			import assets.main.Menu8x8grijs;
+			
+			import models.SendIRModel;
+			
+			[Bindable]
+			private var model:SendIRModel;
 
 			/*[Bindable]
-			[Embed("assets/launchpad_default_icon32.png")]
-			public var fbIcon:Class;*/
+			[Embed("assets/main/Menu8x8grijs.fxg")]
+			public var menuIcon:Class;*/
 
 			/*[Bindable]
 			protected var viewsAC:ArrayCollection = new ArrayCollection();*/ 
 
 			protected function viewActivateHandler(event:ViewNavigatorEvent):void
 			{
+				
+				model = SendIRModel.sendIRModel;
+				
 				/*viewsAC.addItem({label:"Back/Home/Search Events", icon:fbIcon});
 				viewsAC.addItem({label:"Busy Indicator", icon:fbIcon});
 				viewsAC.addItem({label:"CSS Media Queries", icon:fbIcon});
@@ -94,14 +106,23 @@
 				
 			}
 			
+			protected function openMaster_clickHandler(event:MouseEvent):void
+			{
+				svn.showFirstViewNavigatorInPopUp(openMasterButton);
+				
+			}
+			
 		]]>
 	</fx:Script>
 
 	<s:navigationContent>
-		<s:Button label="Home" click="navigator.popToFirstView()" fontSize="10" color="#ffffff" fontWeight="normal"/>
+		<s:Button label="" icon="{Menu8x8grijs}" click="navigator.popToFirstView()" fontSize="10" color="#ffffff" fontWeight="normal"/>
 	</s:navigationContent>
 	<s:titleContent>
-		<s:Label text="Send IR..." color="#ffffff" fontWeight="normal"/>
+		<!--<s:Label text="Send IR..." color="#ffffff" fontWeight="normal"/>-->
+		<s:Spacer width="100%"/>
+		<s:Button id="openMasterButton" label="{model.selectedGateway.label}" click="openMaster_clickHandler(event)" horizontalCenter="0"/>
+		<s:Spacer width="100%"/>
 	</s:titleContent>
 	<s:actionContent>
 		<s:Button label="Settings" click="settings_clickHandler(event)" fontSize="10" color="#ffffff" fontWeight="normal"/>
@@ -114,11 +135,12 @@
 			</s:itemRenderer>
 		</s:List>-->
 	
-	<s:SplitViewNavigator id="svn" width="100%" height="100%">
+	<s:SplitViewNavigator id="svn" width="100%" height="100%" autoHideFirstViewNavigator="true">
 		<s:layout>
 			<s:VerticalLayout gap="0" />
 		</s:layout>
-		<s:ViewNavigator id="devicesMasterNav" width="100%" height="60" firstView="views.PWDevicesMaster"/>
+		<!--the master viewNavigator can be shown as a horizontal scrolling list for instance or as a callout with a vertical scrolling list-->
+		<s:ViewNavigator id="devicesMasterNav" width="90%" height="90%" firstView="views.PWDevicesMaster"/>
 		<s:ViewNavigator id="devicesDetailNav" width="100%" height="100%" firstView="views.PWDeviceDetail"/>
 	</s:SplitViewNavigator>
 	
