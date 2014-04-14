@@ -120,7 +120,7 @@ package models
 			new IRCommand("low")
 		]);
 		
-		public var selectedGateway:Gateway;
+		private var _selectedGateway:Gateway;
 		
 		public function SendIRModel()
 		{
@@ -232,6 +232,7 @@ package models
 				errorText += "\nsaving ELS failed!";
 			}
 			
+			dispatchEvent(new Event("updateSettingsEvent",true));
 		}
 		
 		private function setDefaultGateways(ac:ArrayCollection=null):ArrayCollection {
@@ -728,8 +729,9 @@ package models
 				}
 				gateway.wifiIP = configXML.wifi_ip != "" ? configXML.wifi_ip : null;
 				
-				
-				
+				// and save:
+				setSettings();
+				settings.gatewaysCollection.refresh();
 				
 			}
 			
@@ -773,6 +775,18 @@ package models
 				}
 			}
 			return null;
+		}
+
+		public function get selectedGateway():Gateway
+		{
+			return _selectedGateway;
+		}
+
+		public function set selectedGateway(value:Gateway):void
+		{
+			if (value) {
+				_selectedGateway = value;
+			}
 		}
 		
 		

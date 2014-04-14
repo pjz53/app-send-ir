@@ -18,6 +18,8 @@
 			
 			import models.SendIRModel;
 			
+			import vos.Gateway;
+			
 			
 			[Bindable]
 			private var model:SendIRModel;
@@ -26,7 +28,7 @@
 			{
 				(this.parentDocument as PWSendIRHome).devicesDetailNav.activeView.data=gatewaysList.selectedItem;
 				//(this.parentDocument as PWSendIRHome).devicesDetailNav.activeView.data=gatewaysList.selectedItem as Gateway;
-				model.selectedGateway = gatewaysList.selectedItem;
+				model.selectedGateway = gatewaysList.selectedItem as Gateway;
 			}
 			
 			protected function list_changeHandler(event:IndexChangeEvent):void {
@@ -35,11 +37,12 @@
 				// Create a reference to the ViewNavigator for the Detail frame.
 				var detailNavigator:ViewNavigator = splitNavigator.getViewNavigatorAt(1) as ViewNavigator;
 				// Change the view of the Detail frame based on the selected List item.
-				detailNavigator.pushView(PWDeviceDetail, gatewaysList.selectedItem,null,transCover);
+				detailNavigator.pushView(PWDeviceDetail, gatewaysList.selectedItem as Gateway,null,transCover);
 				
 				splitNavigator.hideViewNavigatorPopUp();
 				
-				model.selectedGateway = gatewaysList.selectedItem;
+				model.selectedGateway = gatewaysList.selectedItem as Gateway;
+				
 			}
 			
 			protected function creationCompleteHandler(event:FlexEvent):void
@@ -63,11 +66,13 @@
 				// Create a reference to the ViewNavigator for the Detail frame.
 				var detailNavigator:ViewNavigator = splitNavigator.getViewNavigatorAt(1) as ViewNavigator;
 				// Change the view of the Detail frame based on the selected List item.
-				detailNavigator.pushView(PWDeviceEdit, gatewaysList.selectedItem,null,transCover);
+				model.selectedGateway = gatewaysList.selectedItem as Gateway;
+				detailNavigator.pushView(PWDeviceEdit, model.selectedGateway,null,transCover);
 				
 				splitNavigator.hideViewNavigatorPopUp();
 				
-				model.selectedGateway = gatewaysList.selectedItem;
+				
+				gatewaysList.selectedIndex = -1;
 			}
 			
 			
@@ -81,7 +86,7 @@
 		<s:SlideViewTransition id="transCover" direction="down" mode="cover" duration="100"/>
 	</fx:Declarations>
 	
-	<s:List id="gatewaysList" width="100%" height="100%" change="list_changeHandler(event)"
+	<s:List id="gatewaysList" width="100%" height="100%" change="list_changeHandler(event)" 
 			dataProvider="{model.settings.gatewaysCollection}" horizontalScrollPolicy="off" verticalScrollPolicy="on">
 		<s:layout>
 			<s:VerticalLayout gap="0" rowHeight="70" requestedRowCount="-1"/>

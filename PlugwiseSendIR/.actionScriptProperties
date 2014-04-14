@@ -19,9 +19,9 @@
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/spark_dmv.swc" useDefaultLinkType="false"/>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation.swc" useDefaultLinkType="false"/>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_dmv.swc" useDefaultLinkType="false"/>
-          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/air/airframework.swc" useDefaultLinkType="false"/>
-          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/air/applicationupdater_ui.swc" useDefaultLinkType="false"/>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_flashflexkit.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/air/applicationupdater_ui.swc" useDefaultLinkType="false"/>
+          <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/air/airframework.swc" useDefaultLinkType="false"/>
           <libraryPathEntry kind="3" linkType="1" path="${PROJECT_FRAMEWORKS}/libs/automation_agent.swc" useDefaultLinkType="false"/>
         </excludedEntries>
       </libraryPathEntry>
@@ -39,10 +39,31 @@
   <flashCatalyst validateFlashCatalystCompatibility="false"/>
   <buildTargets>
     <buildTarget buildTargetName="device" iosSettingsVersion="2" isCurrent="true" platformId="com.adobe.flexide.multiplatform.ios.platform" provisioningFile="/Users/pjz/Documents/Plugwise iPhone Provisioning Certificates and Profiles/Ad Hoc Distribution 2014/Plugwise_Ad_Hoc_Distribution_2014.mobileprovision" releasePackageType="ipa-ad-hoc">
+      <multiPlatformSettings enabled="true" hideAneLibSymbols="0" includePlatformLibs="false" platformID="com.adobe.flexide.multiplatform.ios.platform" reducedSizePackaging="false" version="2"/>
       <airSettings airCertificatePath="/Users/pjz/Documents/Plugwise iPhone Provisioning Certificates and Profiles/Ad Hoc Distribution 2014/PlugwiseDistributionCertificate.p12" airTimestamp="true" anePathSet="true" version="1">
         <airExcludes>
-          <pathEntry path="blackberry-tablet.xml"/>
+          <pathEntry path="assets/launchpad_default_icon114.png"/>
+          <pathEntry path="assets/launchpad_default_icon48.png"/>
           <pathEntry path="blackberry-tablet-icon.png"/>
+          <pathEntry path="assets/launchpad_default_icon128.png"/>
+          <pathEntry path="assets/launchpad_default_icon32.png"/>
+          <pathEntry path="assets/launchpad_low-res-icon.png"/>
+          <pathEntry path="assets/launchpad_butterfly.jpg"/>
+          <pathEntry path="assets/launchpad_default_icon29.png"/>
+          <pathEntry path="assets/launchpad_high-res-icon.png"/>
+          <pathEntry path="assets/launchpad_title.png"/>
+          <pathEntry path="assets/launchpad_default_icon72.png"/>
+          <pathEntry path="blackberry-tablet.xml"/>
+          <pathEntry path="assets/launchpad_default_icon57.png"/>
+          <pathEntry path="assets/launchpad_add.png"/>
+          <pathEntry path="assets/launchpad_default_icon36.png"/>
+          <pathEntry path="assets/launchpad_fb.png"/>
+          <pathEntry path="assets/launchpad_med-res-icon.png"/>
+          <pathEntry path="assets/launchpad_default_icon512.png"/>
+          <pathEntry path="assets/launchpad_account.png"/>
+          <pathEntry path="assets/launchpad_default_icon16.png"/>
+          <pathEntry path="assets/launchpad_activity.png"/>
+          <pathEntry path="assets/launchpad_calendar.png"/>
         </airExcludes>
         <anePaths/>
         <newLaunchParams/>
@@ -50,10 +71,10 @@
         <newPackagingParams/>
         <modifiedPackagingParams/>
       </airSettings>
-      <multiPlatformSettings enabled="true" hideAneLibSymbols="0" includePlatformLibs="false" platformID="com.adobe.flexide.multiplatform.ios.platform" reducedSizePackaging="false" version="2"/>
       <actionScriptSettings version="1"/>
     </buildTarget>
     <buildTarget androidSettingsVersion="2" buildTargetName="device" isCurrent="false" platformId="com.adobe.flexide.multiplatform.android.platform">
+      <multiPlatformSettings enabled="true" hideAneLibSymbols="0" includePlatformLibs="false" platformID="com.adobe.flexide.multiplatform.android.platform" reducedSizePackaging="false" version="2"/>
       <airSettings airCertificatePath="" airTimestamp="true" anePathSet="false" version="1">
         <airExcludes/>
         <anePaths/>
@@ -62,10 +83,10 @@
         <newPackagingParams/>
         <modifiedPackagingParams/>
       </airSettings>
-      <multiPlatformSettings enabled="true" hideAneLibSymbols="0" includePlatformLibs="false" platformID="com.adobe.flexide.multiplatform.android.platform" reducedSizePackaging="false" version="2"/>
       <actionScriptSettings version="1"/>
     </buildTarget>
     <buildTarget buildTargetName="default" isCurrent="false" platformId="com.qnx.flexide.multiplatform.qnx.platform">
+      <multiPlatformSettings enabled="true" hideAneLibSymbols="0" includePlatformLibs="false" platformID="com.qnx.flexide.multiplatform.qnx.platform" reducedSizePackaging="false" version="2"/>
       <airSettings airCertificatePath="" airTimestamp="true" anePathSet="false" version="1">
         <airExcludes/>
         <anePaths/>
@@ -74,7 +95,6 @@
         <newPackagingParams/>
         <modifiedPackagingParams/>
       </airSettings>
-      <multiPlatformSettings enabled="true" hideAneLibSymbols="0" includePlatformLibs="false" platformID="com.qnx.flexide.multiplatform.qnx.platform" reducedSizePackaging="false" version="2"/>
       <actionScriptSettings version="1"/>
     </buildTarget>
   </buildTargets>

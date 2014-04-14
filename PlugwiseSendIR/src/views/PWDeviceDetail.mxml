@@ -35,12 +35,13 @@
 			}
 			
 			
-			protected function slotList_clickHandler(event:MouseEvent):void
+			protected function irCommandList_clickHandler(event:MouseEvent):void
 			{
 				// Send the ir command:
 				var myGateway:Gateway = model.getGatewayByUUID(data.gatewayUuid);
 				model.postSomeIRCommand(myGateway, irCommandList.selectedItem.label, irCommandList.selectedItem.irCommand);
 				
+				irCommandList.selectedIndex = -1;
 			}
 			
 		]]>
@@ -48,13 +49,13 @@
 	
 	<!--<s:Label id="lbl" width="95%" visible="{data!=null?true:false}" text="{data.label}"/>
 	<s:Spacer height="60"/>-->
-	<s:Label width="90%" text="{'Activate one of the following IR Commands of ' + data.label}" verticalCenter="0" horizontalCenter="0" fontSize="11"/>
-	<s:Line width="100%">
+	<!--<s:Label width="90%" text="{'Activate one of the following IR Commands of ' + data.label}" verticalCenter="0" horizontalCenter="0" fontSize="11"/>-->
+	<!--<s:Line width="100%">
 		<s:stroke>
 			<s:SolidColorStroke color="#cccccc" weight="1"/>
 		</s:stroke>
-	</s:Line>
-	<s:List id="irCommandList" width="100%" height="100%" click="slotList_clickHandler(event)" 
+	</s:Line>-->
+	<s:List id="irCommandList" width="100%" height="100%" click="irCommandList_clickHandler(event)" 
 			dataProvider="{data.irCommands}" horizontalScrollPolicy="on" verticalScrollPolicy="off">
 		<s:layout>
 			<s:VerticalLayout gap="0" rowHeight="50"/>

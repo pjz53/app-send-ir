@@ -734,7 +734,7 @@ package vos {
 			}
 			if (connectionModeNew != connectionModeOld) {
 				connectionMode = connectionModeNew;
-				FlexGlobals.topLevelApplication.changeIcon(new Event("connectionModeChanged"));
+				//FlexGlobals.topLevelApplication.changeIcon(new Event("connectionModeChanged"));
 				if (!connectionApAvailable) {
 					startApPoller();//start or stop
 				}

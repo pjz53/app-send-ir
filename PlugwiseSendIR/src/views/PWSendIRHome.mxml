@@ -125,7 +125,8 @@
 		<s:Spacer width="100%"/>
 	</s:titleContent>
 	<s:actionContent>
-		<s:Button label="Settings" click="settings_clickHandler(event)" fontSize="10" color="#ffffff" fontWeight="normal"/>
+		<s:Button label="" click="settings_clickHandler(event)" fontSize="10" color="#ffffff" fontWeight="normal"/>
+		
 	</s:actionContent>
 		<!--<s:List id="viewsList" top="0" bottom="0" left="0" right="0" dataProvider="{viewsAC}" change="onSampleSelect()">
 			<s:itemRenderer>
