@@ -1,0 +1,148 @@
+<?xml version="1.0" encoding="utf-8"?>
+<s:View xmlns:fx="http://ns.adobe.com/mxml/2009" 
+		xmlns:s="library://ns.adobe.com/flex/spark" title="Details"
+		initialize="initializeHandler(event)"
+		viewActivate="viewActivateHandler(event)" viewDeactivate="viewDeactivateHandler(event)"
+		actionBarVisible="false"
+		dataChange="updateGateway(event)">
+	<s:layout>
+		<s:VerticalLayout gap="0"/>
+	</s:layout>
+	
+	<fx:Script>
+		<![CDATA[
+			import mx.events.FlexEvent;
+			
+			import spark.events.TextOperationEvent;
+			import spark.events.ViewNavigatorEvent;
+			
+			import models.SendIRModel;
+			
+			import vos.Gateway;
+			
+			[Bindable]
+			private var model:SendIRModel;
+			/*[Bindable]
+			private var myGateway:Gateway;*/
+									
+			protected function initializeHandler(event:FlexEvent):void
+			{
+				model = SendIRModel.sendIRModel;
+				//model.addEventListener("updateSettingsEvent",updateGateway,false,0,true);
+			}
+			
+			protected function viewActivateHandler(event:ViewNavigatorEvent):void
+			{
+				updateGateway();
+			}
+			
+			protected function updateGateway(event:Event=null):void
+			{
+				if (!model) {
+					model = SendIRModel.sendIRModel;
+				}
+				if (data) {
+					//myGateway = model.getGatewayByUUID(data.gatewayUuid);
+					model.getIRCommands(data as Gateway);
+				}
+			}
+			
+			protected function textInputID_changeHandler(event:TextOperationEvent):void
+			{
+				if (event.target.text.length == 8) {
+					trace("id length is 8!");
+					// so call beacon!
+					// first set id in gateway
+					data.codeSmile = event.target.text;
+					model.getBeaconForGateway(data as Gateway);
+				}
+			}
+			
+			protected function textInputLabel_changeHandler(event:TextOperationEvent):void
+			{
+				data.label = event.target.text;
+			}
+			
+			protected function useLEDGroup_valueCommitHandler(event:FlexEvent):void
+			{
+				if (useLEDGroup.selectedValue) {
+					data.useLed = String(useLEDGroup.selectedValue);
+				}
+			}
+			
+			protected function textInputBrand_changeHandler(event:TextOperationEvent):void
+			{
+				data.brand = event.target.text;
+				
+			}
+			
+			protected function textInputModel_changeHandler(event:TextOperationEvent):void
+			{
+				data.model = event.target.text;
+				
+			}
+			
+			protected function viewDeactivateHandler(event:ViewNavigatorEvent):void
+			{
+				// save now:
+				model.setSettings();
+				
+			}
+			
+			
+		]]>
+	</fx:Script>
+	
+	<s:states>
+		<s:State name="collectingBeacon"/>
+	</s:states>
+	
+	<fx:Declarations>
+		<s:RadioButtonGroup id="useLEDGroup" selection="{data.useLed=='Up'?Up:Side}" valueCommit="useLEDGroup_valueCommitHandler(event)"/>
+	</fx:Declarations>
+	
+	<s:Scroller width="100%" height="100%" horizontalScrollPolicy="off" verticalScrollPolicy="on">
+		<s:VGroup width="100%" height="100%" paddingBottom="10" paddingLeft="10" paddingRight="10" paddingTop="10" gap="10">
+			
+			<s:Label text="Device details" styleName="normalTextBold"/>
+			
+			<s:Label text="Smile ID (8 lower case characters)*" width="90%" verticalCenter="0" styleName="miniText"/>
+			<s:HGroup width="100%">
+				<s:TextInput id="textInputID" width="100%" verticalCenter="0" textAlign="left" 
+							 text="{data.codeSmile}" change="textInputID_changeHandler(event)" />
+				<s:Group height="100%">
+					<s:BusyIndicator includeIn="collectingBeacon" verticalCenter="0"/>
+				</s:Group>
+			</s:HGroup>
+			
+			<s:Label text="Use LED" width="90%" verticalCenter="0" styleName="miniText"/>
+			<s:HGroup gap="20">
+				<s:RadioButton id="Up" group="{useLEDGroup}" label="Up"/>
+				<s:RadioButton id="Side" group="{useLEDGroup}" label="Side"/>
+				<!--add an image for the led positions of the Smile-->
+				<s:Image source="@Embed(source='assets/launchpad_home.png')"/>
+			</s:HGroup>
+			
+			<s:Label text="Device name*" width="90%" verticalCenter="0" styleName="miniText"/>
+			<s:TextInput id="textInputLabel" width="100%" verticalCenter="0" textAlign="left" 
+						 text="{data.label}" change="textInputLabel_changeHandler(event)" />
+			
+			<s:Label text="Brand" width="90%" verticalCenter="0" styleName="miniText"/>
+			<s:TextInput id="textInputBrand" width="100%" verticalCenter="0" textAlign="left" 
+						 text="{data.brand}" change="textInputBrand_changeHandler(event)" />
+			
+			<s:Label text="Model" width="90%" verticalCenter="0" styleName="miniText"/>
+			<s:TextInput id="textInputModel" width="100%" verticalCenter="0" textAlign="left" 
+						 text="{data.model}" change="textInputModel_changeHandler(event)" />
+			
+			<s:Label text="IP-address" width="90%" verticalCenter="0" styleName="miniText"/>
+			<s:TextInput id="textInputHostIp" width="100%" verticalCenter="0" textAlign="left" 
+						 text="{data.hostIP}" />
+			
+			
+			
+		</s:VGroup>
+		
+	</s:Scroller>
+	
+</s:View>

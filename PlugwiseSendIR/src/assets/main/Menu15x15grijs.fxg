@@ -1,0 +1,45 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<Graphic version="2.0" viewHeight="42.5195" viewWidth="42.5195" ai:appVersion="15.1.0.39" ATE:version="1.0.0" flm:version="1.0.0" d:id="1" d:using="" xmlns="http://ns.adobe.com/fxg/2008" xmlns:ATE="http://ns.adobe.com/ate/2009" xmlns:ai="http://ns.adobe.com/ai/2009" xmlns:d="http://ns.adobe.com/fxg/2008/dt" xmlns:flm="http://ns.adobe.com/flame/2008">
+  <Library/>
+  <Group ai:artboardActive="1" ai:artboardIndex="0" ai:seqID="1" d:layerType="page" d:pageHeight="42.52" d:pageWidth="42.52" d:type="layer" d:userLabel="Artboard 1">
+    <Group ai:objID="17a27a00" ai:seqID="2" d:id="2" d:type="layer" d:userLabel="Layer 1">
+      <Group x="3.25977" y="9.63916" ai:objID="17a28700" ai:seqID="3">
+        <Group ai:objID="17a28b00" ai:seqID="4">
+          <Line xFrom="1.5" yFrom="11.7427" xTo="34.5" yTo="11.7427" ai:objID="e7cfe80" ai:seqID="5">
+            <stroke>
+              <SolidColorStroke weight="3" joints="miter" miterLimit="10" color="#7D7D7D"/>
+            </stroke>
+          </Line>
+          <Line xFrom="1.5" yFrom="1.5" xTo="34.5" yTo="1.5" ai:objID="e7d0600" ai:seqID="6">
+            <stroke>
+              <SolidColorStroke weight="3" joints="miter" miterLimit="10" color="#7D7D7D"/>
+            </stroke>
+          </Line>
+          <Line xFrom="1.5" yFrom="21.7427" xTo="34.5" yTo="21.7427" ai:objID="e7d0900" ai:seqID="7">
+            <stroke>
+              <SolidColorStroke weight="3" joints="miter" miterLimit="10" color="#7D7D7D"/>
+            </stroke>
+          </Line>
+        </Group>
+      </Group>
+    </Group>
+  </Group>
+  <Private>
+      <ai:PrivateElement d:ref="#1">
+        <ai:SaveOptions>
+          <ai:Dict data="B aiEditCap 1 B includeXMP 0 B includeSymbol 0 B writeImages 1 I versionKey 2 B includeObjectOutsideArtboard 0 I preserveTextPolicy 4 I preserveFilterPolicy 3 I preserveGradientPolicy 4 I rasterizeResolution 72 B downsampleLinkedImages 0 I expandBlendsOption 5 "/>
+        </ai:SaveOptions>
+        <ai:DocData base="Menu 15 x 15 grijs.assets/images" rulerCanvasDiffH="21.5" rulerCanvasDiffV="21.5">
+          <ai:DocRasterSettings>
+            <ai:Dict data="R padd 36 B mask 0 B spot 0 B alis 0 I dpi. 300 I colr 4 "/>
+          </ai:DocRasterSettings>
+        </ai:DocData>
+        <ai:AutoGenImageList>
+          <ai:Dict/>
+        </ai:AutoGenImageList>
+      </ai:PrivateElement>
+      <ai:PrivateElement flm:hashcode="20278C9068DB1D2E8860A396A8884711" d:ref="#2">
+        <ai:LayerOptions color="5 79.31 257 128.502"/>
+      </ai:PrivateElement>
+    </Private>
+  </Graphic>
